@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using MifareReaderApp.ViewModels;
+using System.Diagnostics;
+using System.IO.Ports;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,13 +14,13 @@ using System.Windows.Shapes;
 
 namespace MifareReaderApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        public MainWindowViewModel ViewModel { get; set; }
+
         public MainWindow()
         {
+            ViewModel = new MainWindowViewModel();
             InitializeComponent();
         }
     }
