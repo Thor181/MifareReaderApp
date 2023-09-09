@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using MifareReaderApp.Stuff.Results;
 
 namespace MifareReaderApp.Stuff
 {
@@ -22,7 +23,7 @@ namespace MifareReaderApp.Stuff
             using var sha256 = SHA256.Create();
             var hash = sha256.ComputeHash(bytes);
 
-            return Encoding.UTF8.GetString(hash);
+            return Convert.ToHexString(hash);
         }
 
         public static void WriteToFile(string password)
@@ -30,9 +31,29 @@ namespace MifareReaderApp.Stuff
             File.WriteAllText(FileName, password);
         }
 
-        public static string ReadFromFile()
+        public static FileReadResult ReadFromFile()
         {
-            return File.ReadAllText(FileName);
+            var result = new FileReadResult();
+            
+            if (!File.Exists(FileName))
+            {
+                result.IsSuccess = false;
+                result.Message = "Файл с паролем не найден";
+                return result;
+            }
+
+            var content = File.ReadAllText(FileName);
+
+            if (string.IsNullOrEmpty(content))
+            {
+                result.IsSuccess = false;
+                result.Message = "Файл с паролем пуст";
+                return result;
+            }
+
+            result.Message = content;
+
+            return result;
         }
 
         public static PasswordCheckResult Check(string password)
@@ -46,17 +67,18 @@ namespace MifareReaderApp.Stuff
                 return result;
             }
 
-            var filePassword = ReadFromFile();
-            if (string.IsNullOrEmpty(filePassword))
+            var readResult = ReadFromFile();
+
+            if (!readResult.IsSuccess)
             {
                 result.IsSuccess = false;
-                result.Message = "В файле не обнаружен пароль";
+                result.Message = readResult.Message;
                 return result;
             }
 
-            var hash = Hash(password);
+            var hashPassword = Hash(password);
 
-            if (hash == password)
+            if (hashPassword == readResult.Message)
                 return result;
 
             result.IsSuccess = false;

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MifareReaderApp.Views.Interfaces
+namespace MifareReaderApp.Stuff.Results
 {
-    public interface IPage
+    public class PasswordCheckResult : BaseResult
     {
-        public void BeforeOpen();
-
     }
 }

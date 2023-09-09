@@ -10,9 +10,10 @@
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Red" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <SolidColorBrush x:Key="MainBackgroundColor">#FF4E4E4E</SolidColorBrush>
+            <SolidColorBrush x:Key="MainBackgroundColor" Color="#FFF3F3F3"></SolidColorBrush>
             <SolidColorBrush x:Key="GreenStatus">#4caf50</SolidColorBrush>
             <SolidColorBrush x:Key="RedStatus">#ff6551</SolidColorBrush>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

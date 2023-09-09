@@ -23,10 +23,15 @@ namespace MifareReaderApp.Views.Dialogs
         {
             InitializeComponent();
 
+            Owner = App.Current.MainWindow;
             DataContext = this;
             Message = message;
         }
 
+        /// <summary>
+        /// Показать диалоговое окно <see cref="InputPasswordDialog"/> с проверкой введенного пароля
+        /// </summary>
+        /// <returns><see cref="true"/>  - если введен верный пароль, иначе <see cref="false"/></returns>
         public new bool ShowDialog()
         {
             var result = base.ShowDialog();
@@ -36,12 +41,9 @@ namespace MifareReaderApp.Views.Dialogs
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            var password = PasswordBox.Password;
-            var result = CheckPassword(password);
-            if (result == false)
-                return;
-
-            this.DialogResult = true;
+            var result = CheckPassword(PasswordBox.Password);
+            
+            this.DialogResult = result;
         }
 
         private bool CheckPassword(string password)
@@ -50,10 +52,9 @@ namespace MifareReaderApp.Views.Dialogs
 
             if (!result.IsSuccess)
             {
-                new MessageDialog(result.Message).ShowDialog();
+                MessageDialog.ShowDialog(result.Message);
                 return false;
             }
-
 
             return true;
         }

@@ -1,16 +1,6 @@
 ﻿using MifareReaderApp.ViewModels;
-using System.Diagnostics;
-using System.IO.Ports;
-using System.Text;
+using MifareReaderApp.Views;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MifareReaderApp
 {
@@ -20,8 +10,13 @@ namespace MifareReaderApp
 
         public MainWindow()
         {
-            ViewModel = new MainWindowViewModel();
+            ViewModel = new MainWindowViewModel(this);
             InitializeComponent();
+
+            ViewModel.InitializePort();
+
+            var operatorPageVM = (OperatorTab.Content as OperatorPage)!.ViewModel;
+            ViewModel.InitializeViewModels(operatorPageVM);
         }
     }
 }

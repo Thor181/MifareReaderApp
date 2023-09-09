@@ -1,4 +1,5 @@
-﻿using MifareReaderApp.Views.Interfaces;
+﻿using MifareReaderApp.ViewModels;
+using MifareReaderApp.Views.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,13 @@ using System.Windows.Shapes;
 
 namespace MifareReaderApp.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для OperatorPage.xaml
-    /// </summary>
     public partial class OperatorPage : UserControl, IPage
     {
+        public OperatorPageViewModel ViewModel { get; set; }
+
         public OperatorPage()
         {
+            ViewModel = new OperatorPageViewModel();
             InitializeComponent();
         }
 

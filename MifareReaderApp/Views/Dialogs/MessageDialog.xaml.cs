@@ -7,7 +7,7 @@ namespace MifareReaderApp.Views.Dialogs
     {
         public string Message { get; private set; }
 
-        public MessageDialog(string message)
+        private MessageDialog(string message)
         {
             InitializeComponent();
             Owner = App.Current.MainWindow;
@@ -15,11 +15,13 @@ namespace MifareReaderApp.Views.Dialogs
             Message = message;
         }
 
-        public new bool? ShowDialog()
+        public static bool? ShowDialog(string message)
         {
+            var dialog = new MessageDialog(message);
+
             SystemSounds.Asterisk.Play();
-            
-            return base.ShowDialog();
+
+            return dialog.ShowDialog();
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)

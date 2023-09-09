@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MifareReaderApp"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:views="clr-namespace:MifareReaderApp.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:views="clr-namespace:MifareReaderApp.Views"
+        xmlns:statusControls="clr-namespace:MifareReaderApp.Views.Controls.Status"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Name="MainWindowView" DataContext="ViewModel" WindowStartupLocation="CenterScreen">
     <Grid Background="{StaticResource ResourceKey=MainBackgroundColor}">
@@ -14,24 +16,22 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button x:Name="DbStatus" Height="35" Width="35" Padding="5" Margin="0 0 5 0" DataContext="" Background="{StaticResource RedStatus}" BorderBrush="{StaticResource RedStatus}">
-                <Image Source="../Resources/db.png" ></Image>
-            </Button>
-            <Button x:Name="PortStatus" Height="35" Width="35" Padding="5" Margin="0 0 5 0" Background="{StaticResource RedStatus}" BorderBrush="{StaticResource RedStatus}">
-                <Image Source="../Resources/port.png"></Image>
-            </Button>
+            <statusControls:DatabaseStatusControl x:Name="DatabaseStatusControl" Margin="0 0 5 0"></statusControls:DatabaseStatusControl>
+            <statusControls:PortStatusControl x:Name="PortStatusControl" Margin="0 0 5 0" ></statusControls:PortStatusControl>
         </StackPanel>
 
         <TabControl x:Name="MainTabControl" Grid.RowSpan="2"  HorizontalContentAlignment="Left" 
-                    materialDesign:ColorZoneAssist.Mode="PrimaryLight" 
-                    SelectedItem="{Binding ElementName=MainWindowView, Path=ViewModel.SelectedTab, UpdateSourceTrigger=PropertyChanged}"
-                    >
-            <TabItem x:Name="OperatorTab" Header="Оператор" >
+                    materialDesign:ColorZoneAssist.Mode="PrimaryLight" IsTabStop="False"
+                    SelectedItem="{Binding ElementName=MainWindowView, Path=ViewModel.SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            
+            <TabItem x:Name="OperatorTab" Header="Оператор">
                 <views:OperatorPage></views:OperatorPage>
             </TabItem>
             <TabItem x:Name="AdministratorTab" Header="Администратор" >
                 <views:AdministratorPage></views:AdministratorPage>
             </TabItem>
+            
         </TabControl>
+        
     </Grid>
 </Window>
