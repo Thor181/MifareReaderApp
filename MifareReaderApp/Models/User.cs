@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MifareReaderApp.Models;
 
@@ -28,4 +29,9 @@ public partial class User
     public DateTime Dt { get; set; }
 
     public virtual Place Place { get; set; } = null!;
+
+    [NotMapped]
+    public string BeforeDate { get; set; } = null!;
+    [NotMapped]
+    public string BeforeTime { get; set; } = null!;
 }

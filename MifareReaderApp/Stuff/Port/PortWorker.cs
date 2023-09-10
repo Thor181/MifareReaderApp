@@ -37,7 +37,7 @@ namespace MifareReaderApp.Stuff
             }
             catch (Exception e)
             {
-                MessageDialog.ShowDialog($"При открытии соединения к порту {PortName} возникла ошибка.\n" + e.Message);
+                MessageDialog.ShowDialog($"При открытии соединения к порту {PortName} возникла ошибка.\n\n" + e.Message);
             }
         }
 

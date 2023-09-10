@@ -4,11 +4,16 @@ using System.Windows;
 
 namespace MifareReaderApp
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+
+        public static void DispatcherInvoke(Action action)
+        {
+            App.Current.Dispatcher.Invoke(action);
+        }
+
+
     }
+
 
 }

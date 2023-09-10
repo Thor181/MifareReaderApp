@@ -79,15 +79,14 @@ namespace MifareReaderApp.ViewModels
 
             if (!interpretationResult.IsSuccess)
             {
-                MessageDialog.ShowDialog(interpretationResult.Message);
+                App.DispatcherInvoke(() =>
+                {
+                    MessageDialog.ShowDialog(interpretationResult.Message);
+                });
                 return;
             }
 
             OperatorPage.HandleUser(interpretationResult.Message);
-
-
-            
-
         }
     }
 

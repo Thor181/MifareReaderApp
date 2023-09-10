@@ -8,30 +8,46 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using MifareReaderApp.Models;
+using System.Windows.Input;
+using System.Windows;
+using System.Windows.Controls;
+using MifareReaderApp.Stuff.Commands;
 
 namespace MifareReaderApp.ViewModels
 {
     public class OperatorPageViewModel : INotifyPropertyChanged
     {
-        public bool FieldsIsEnabled { get; set; } = false;
-        public bool ButtonsIsEnabled { get; set; } = false;
-
-        private string _cardNumber;
-        public string CardNumber
+        #region Properties
+        private bool _fieldsIsEnabled;
+        public bool FieldsIsEnabled
         {
-            get { return _cardNumber; }
-            set
-            {
-                _cardNumber = value;
-                OnPropertyChanged();
-            }
+            get { return _fieldsIsEnabled; }
+            set { _fieldsIsEnabled = value; OnPropertyChanged(); }
         }
+
+        private bool _buttonsIsEnabled;
+
+        public bool ButtonsIsEnabled
+        {
+            get { return _buttonsIsEnabled; }
+            set { _buttonsIsEnabled = value; OnPropertyChanged(); }
+        }
+
+        private User _user;
+        public User User
+        {
+            get { return _user; }
+            set { _user = value; OnPropertyChanged(); }
+        }
+        #endregion
+
+        public SaveUserDataCommand SaveCommand { get; set; } = new();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public OperatorPageViewModel()
         {
-
         }
 
         private void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -52,7 +68,11 @@ namespace MifareReaderApp.ViewModels
 
             if (result.NotFound == true)
             {
-                OperatorPage.
+                
+                User = new User() { Card = cardNumber };
+                FieldsIsEnabled = true;
+                ButtonsIsEnabled = true;
+                return;
             }
         }
     }
