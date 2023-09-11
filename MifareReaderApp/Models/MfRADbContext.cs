@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using MifareReaderApp.Stuff;
 
 namespace MifareReaderApp.Models;
 
@@ -30,7 +31,7 @@ public partial class MfRADbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=MfRADb;Trusted_Connection=True;Encrypt=false");
+        => optionsBuilder.UseSqlServer(AppConfig.Instance.ConnectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

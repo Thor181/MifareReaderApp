@@ -18,12 +18,26 @@ using AvailableControlStatus = MifareReaderApp.Stuff.Status;
 
 namespace MifareReaderApp.Views.Controls.Status
 {
-    public partial class PortStatusControl : UserControl, INotifyPropertyChanged
+    public partial class StatusControl : UserControl, INotifyPropertyChanged
     {
+        public static readonly DependencyProperty ImageMarginProperty = DependencyProperty.Register(nameof(ImageMargin), typeof(Thickness), typeof(StatusControl));
+        public Thickness ImageMargin
+        {
+            get => (Thickness)this.GetValue(ImageMarginProperty);
+            set => this.SetValue(ImageMarginProperty, value);
+        }
+
+        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register(nameof(ImageSource), typeof(string), typeof(StatusControl));
+        public string ImageSource
+        {
+            get => this.GetValue(ImageSourceProperty) as string;
+            set => this.SetValue(ImageSourceProperty, value);
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private ControlStatus _controlStatus;
-        public ControlStatus ControlStatus
+        private AvailableControlStatus.ControlStatus _controlStatus;
+        public AvailableControlStatus.ControlStatus ControlStatus
         {
             get
             {
@@ -51,7 +65,7 @@ namespace MifareReaderApp.Views.Controls.Status
             }
         }
 
-        public PortStatusControl()
+        public StatusControl()
         {
             InitializeComponent();
         }

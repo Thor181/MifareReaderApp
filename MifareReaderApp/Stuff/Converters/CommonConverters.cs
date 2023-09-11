@@ -12,6 +12,7 @@ namespace MifareReaderApp.Stuff.Converters
         public static DateTime StringToDateTime(string datetime, string time)
         {
             var splittedDateTime = datetime.Split(' ');
+            var d = DateTime.Parse(splittedDateTime[0]);
             var splittedDate = splittedDateTime[0].Split('/');
             var day = Convert.ToInt32(splittedDate[1]);
             var month = Convert.ToInt32(splittedDate[0]);

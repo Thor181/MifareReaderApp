@@ -13,10 +13,26 @@ namespace MifareReaderApp.Stuff
         private SerialPort Port { get; set; }
         private bool _disposed = false;
 
-        public delegate void PortDataReceived(string data);
-        public event PortDataReceived? OnPortDataReceived;
+        public delegate void PortDataReceivedEventHandler(string data);
+        public event PortDataReceivedEventHandler? OnPortDataReceived;
 
-        public bool PortIsOpen => Port.IsOpen;
+        public delegate void PortOpenedEventHandler(bool result);
+        public event PortOpenedEventHandler OnPortOpened;
+
+        private bool _portIsOpen;
+        public bool PortIsOpen
+        {
+            get
+            {
+                return _portIsOpen;
+            }
+            set
+            {
+                _portIsOpen = value;
+                OnPortOpened?.Invoke(value);
+            }
+        }
+
         private string PortName => AppConfig.Instance.PortName;
 
         public PortWorker()
@@ -31,14 +47,18 @@ namespace MifareReaderApp.Stuff
 
         private void OpenPort()
         {
-            try
+            _ = Retry.Do(() => { Port.Open(); return true; }, OnPortOpen, TimeSpan.FromSeconds(5), 99, "Port");
+        }
+
+        private bool OnPortOpen(bool result)
+        {
+            if (result == true)
             {
-                Port.Open();
+                PortIsOpen = true;
+                return false;
             }
-            catch (Exception e)
-            {
-                MessageDialog.ShowDialog($"При открытии соединения к порту {PortName} возникла ошибка.\n\n" + e.Message);
-            }
+
+            return true;
         }
 
         private void Port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)

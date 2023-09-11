@@ -16,7 +16,7 @@ namespace MifareReaderApp.Stuff.Commands
             if (user != null)
             {
                 user.Before = CommonConverters.StringToDateTime(user.BeforeDate, user.BeforeTime);
-#error Продолжаем добавления User в БД
+
             }
         }
     }

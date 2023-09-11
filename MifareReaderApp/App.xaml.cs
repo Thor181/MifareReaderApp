@@ -6,13 +6,10 @@ namespace MifareReaderApp
 {
     public partial class App : Application
     {
-
         public static void DispatcherInvoke(Action action)
         {
             App.Current.Dispatcher.Invoke(action);
         }
-
-
     }
 
 

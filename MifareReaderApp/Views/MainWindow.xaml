@@ -16,8 +16,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <statusControls:DatabaseStatusControl x:Name="DatabaseStatusControl" Margin="0 0 5 0"></statusControls:DatabaseStatusControl>
-            <statusControls:PortStatusControl x:Name="PortStatusControl" Margin="0 0 5 0" ></statusControls:PortStatusControl>
+            <statusControls:StatusControl x:Name="DatabaseStatusControl" Margin="0 0 5 0" ImageMargin="5" ImageSource="/Resources/db.png"></statusControls:StatusControl>
+            <statusControls:StatusControl x:Name="PortStatusControl" Margin="0 0 5 0" DataContext="ViewModel" ImageSource="/Resources/port.png" ></statusControls:StatusControl>
         </StackPanel>
 
         <TabControl x:Name="MainTabControl" Grid.RowSpan="2"  HorizontalContentAlignment="Left" 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MifareReaderApp.Models;
+using MifareReaderApp.Stuff;
 using System;
 using System.Collections.Generic;
 using System.Linq;

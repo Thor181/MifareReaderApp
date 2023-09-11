@@ -1,4 +1,5 @@
 ﻿using MifareReaderApp.DataLogic;
+using MifareReaderApp.DataLogic.Stuff;
 using MifareReaderApp.Stuff;
 using MifareReaderApp.Stuff.Port;
 using MifareReaderApp.Views;
@@ -20,8 +21,8 @@ namespace MifareReaderApp.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private MainWindow MainWindow { get; set; }
-        private PortStatusControl PortStatusControl => MainWindow.PortStatusControl;
-        private DatabaseStatusControl DatabaseStatusControl => MainWindow.DatabaseStatusControl;
+        private StatusControl PortStatusControl => MainWindow.PortStatusControl;
+        private StatusControl DatabaseStatusControl => MainWindow.DatabaseStatusControl;
         private OperatorPageViewModel OperatorPage;
 
         private TabItem? PreviousTab { get; set; }
@@ -46,31 +47,27 @@ namespace MifareReaderApp.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private HealthLogic _healthLogic;
+
         public MainWindowViewModel(MainWindow mainWindow)
         {
             MainWindow = mainWindow;
         }
 
+        #region Port
         public void InitializePort()
         {
             PortWorker = new PortWorker();
             PortWorker.OnPortDataReceived += OnPortDataReceived;
+            PortWorker.OnPortOpened += OnPortOpened;
         }
 
-        public void InitializeViewModels(OperatorPageViewModel operatorPageViewModel)
+        private void OnPortOpened(bool result)
         {
-            OperatorPage = operatorPageViewModel;
-        }
-
-        private void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
-        private void OnSelectedTabChanged(TabItem selectedTab)
-        {
-            var page = selectedTab.Content as IPage;
-            page?.BeforeOpen();
+            if (result == true)
+                PortStatusControl.ControlStatus = Stuff.Status.ControlStatus.GreenStatus;
+            else
+                PortStatusControl.ControlStatus = Stuff.Status.ControlStatus.RedStatus;
         }
 
         private void OnPortDataReceived(string data)
@@ -88,7 +85,44 @@ namespace MifareReaderApp.ViewModels
 
             OperatorPage.HandleUser(interpretationResult.Message);
         }
+        #endregion
+
+        public void InitializeDatabase()
+        {
+            _healthLogic = new HealthLogic();
+            _healthLogic.OnConnected += OnDatabaseConnected;
+            _healthLogic.CheckDbAvailable();
+        }
+
+        private void OnDatabaseConnected(bool result)
+        {
+            if (result == true)
+            {
+                DatabaseStatusControl.ControlStatus = Stuff.Status.ControlStatus.GreenStatus;
+                //_healthLogic.OnConnected -= OnDatabaseConnected;
+                //_healthLogic.Dispose();
+            }
+            else
+            {
+                DatabaseStatusControl.ControlStatus = Stuff.Status.ControlStatus.RedStatus;
+
+            }
+        }
+
+        public void InitializeViewModels(OperatorPageViewModel operatorPageViewModel)
+        {
+            OperatorPage = operatorPageViewModel;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void OnSelectedTabChanged(TabItem selectedTab)
+        {
+            var page = selectedTab.Content as IPage;
+            page?.BeforeOpen();
+        }
     }
-
-
 }

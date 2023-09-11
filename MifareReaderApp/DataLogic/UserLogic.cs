@@ -33,5 +33,10 @@ namespace MifareReaderApp.DataLogic
 
             return result;
         }
+
+        //public DbOperationResult<User> AddUser(User user)
+        //{
+            
+        //}
     }
 }
