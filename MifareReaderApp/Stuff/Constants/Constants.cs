@@ -1,4 +1,4 @@
-﻿namespace MifareReaderApp.Stuff
+﻿namespace MifareReaderApp.Stuff.Constants
 {
     public class Constants
     {

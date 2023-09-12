@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MifareReaderApp.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace MifareReaderApp.Models;
 
-public partial class Place
+public partial class Place : IHelperEntity
 {
     public int Id { get; set; }
 

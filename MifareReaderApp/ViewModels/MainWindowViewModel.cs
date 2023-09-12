@@ -76,10 +76,7 @@ namespace MifareReaderApp.ViewModels
 
             if (!interpretationResult.IsSuccess)
             {
-                App.DispatcherInvoke(() =>
-                {
                     MessageDialog.ShowDialog(interpretationResult.Message);
-                });
                 return;
             }
 
@@ -89,6 +86,8 @@ namespace MifareReaderApp.ViewModels
 
         public void InitializeDatabase()
         {
+            
+
             _healthLogic = new HealthLogic();
             _healthLogic.OnConnected += OnDatabaseConnected;
             _healthLogic.CheckDbAvailable();
@@ -99,8 +98,12 @@ namespace MifareReaderApp.ViewModels
             if (result == true)
             {
                 DatabaseStatusControl.ControlStatus = Stuff.Status.ControlStatus.GreenStatus;
-                //_healthLogic.OnConnected -= OnDatabaseConnected;
-                //_healthLogic.Dispose();
+
+                if (!AppConfig.Instance.DatabaseInitialized)
+                {
+                    new DbInitialization().Initialize();
+                    AppConfig.Instance.DatabaseInitialized = true;
+                }
             }
             else
             {

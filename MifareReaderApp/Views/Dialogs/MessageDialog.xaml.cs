@@ -17,11 +17,17 @@ namespace MifareReaderApp.Views.Dialogs
 
         public static bool? ShowDialog(string message)
         {
-            var dialog = new MessageDialog(message);
+            bool? result = false;
+            App.DispatcherInvoke(() =>
+            {
+                var dialog = new MessageDialog(message);
 
-            SystemSounds.Asterisk.Play();
+                SystemSounds.Asterisk.Play();
 
-            return dialog.ShowDialog();
+                result = dialog.ShowDialog();
+            });
+
+            return result;
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)

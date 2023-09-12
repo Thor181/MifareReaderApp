@@ -17,6 +17,9 @@ namespace MifareReaderApp.Stuff
         [JsonIgnore]
         public bool PasswordSetted => Password.ReadFromFile().IsSuccess;
 
+        [JsonIgnore]
+        public bool DatabaseInitialized { get; set; } = false;
+
         private string _configPath = "Config\\Config.json";
 
         public string PortName { get; set; } = "COM1";

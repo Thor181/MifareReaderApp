@@ -22,9 +22,17 @@ namespace MifareReaderApp.Stuff
                         result = action.Invoke();
                         var retry = callback.Invoke(result);
                         if (retry == true)
-                            throw new Exception("Next retry");
+                        {
+                            var ex = new Exception("Next retry");
+                            ex.Data.Add("NextRetry", true);
+                            throw ex;
+                        }
 
                         return;
+                    }
+                    catch (Exception ex) when (ex.Data["NextRetry"]?.Equals(true) == true)
+                    {
+                        await Task.Delay(interval);
                     }
                     catch (Exception e)
                     {

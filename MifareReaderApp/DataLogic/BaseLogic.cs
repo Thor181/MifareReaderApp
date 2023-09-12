@@ -20,6 +20,9 @@ namespace MifareReaderApp.DataLogic
             DbContext = new MfRADbContext();
         }
 
+        protected Guid GenerateId() => Guid.NewGuid();
+        
+
         #region Dispose
         public void Dispose()
         {

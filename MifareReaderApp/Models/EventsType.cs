@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MifareReaderApp.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace MifareReaderApp.Models;
 
-public partial class EventsType
+public partial class EventsType : IHelperEntity
 {
     public int Id { get; set; }
 

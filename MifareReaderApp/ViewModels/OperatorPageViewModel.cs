@@ -67,13 +67,12 @@ namespace MifareReaderApp.ViewModels
             }
 
             if (result.NotFound == true)
-            {
-                
-                User = new User() { Card = cardNumber };
-                FieldsIsEnabled = true;
-                ButtonsIsEnabled = true;
-                return;
-            }
+                User = new User() { Card = cardNumber, Before = DateTime.Now };
+            else
+                User = result.Entity;
+
+            FieldsIsEnabled = true;
+            ButtonsIsEnabled = true;
         }
     }
 }

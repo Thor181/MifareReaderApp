@@ -35,8 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Commands\" />
-    <Folder Include="Models\Interfaces\" />
-    <Folder Include="Stuff\Extenstions\" />
   </ItemGroup>
 
 </Project>
