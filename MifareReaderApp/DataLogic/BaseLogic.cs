@@ -21,7 +21,6 @@ namespace MifareReaderApp.DataLogic
         }
 
         protected Guid GenerateId() => Guid.NewGuid();
-        
 
         #region Dispose
         public void Dispose()
@@ -43,6 +42,5 @@ namespace MifareReaderApp.DataLogic
             }
         }
         #endregion
-
     }
 }

@@ -21,14 +21,15 @@ namespace MifareReaderApp.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private MainWindow MainWindow { get; set; }
+
+        private OperatorPageViewModel OperatorPageViewModel;
+
         private StatusControl PortStatusControl => MainWindow.PortStatusControl;
         private StatusControl DatabaseStatusControl => MainWindow.DatabaseStatusControl;
-        private OperatorPageViewModel OperatorPage;
 
         private TabItem? PreviousTab { get; set; }
 
         private TabItem? _selectedTab;
-
         public TabItem SelectedTab
         {
             get
@@ -74,20 +75,24 @@ namespace MifareReaderApp.ViewModels
         {
             var interpretationResult = DataInterpreter.GetCardNumber(data);
 
-            if (!interpretationResult.IsSuccess)
+            if (interpretationResult.NoCard)
             {
-                    MessageDialog.ShowDialog(interpretationResult.Message);
+                OperatorPageViewModel.ResetState();
                 return;
             }
 
-            OperatorPage.HandleUser(interpretationResult.Message);
+            if (!interpretationResult.IsSuccess)
+            {
+                MessageDialog.ShowDialog(interpretationResult.Message);
+                return;
+            }
+
+            OperatorPageViewModel.HandleUser(interpretationResult.Message);
         }
         #endregion
 
         public void InitializeDatabase()
         {
-            
-
             _healthLogic = new HealthLogic();
             _healthLogic.OnConnected += OnDatabaseConnected;
             _healthLogic.CheckDbAvailable();
@@ -108,13 +113,12 @@ namespace MifareReaderApp.ViewModels
             else
             {
                 DatabaseStatusControl.ControlStatus = Stuff.Status.ControlStatus.RedStatus;
-
             }
         }
 
         public void InitializeViewModels(OperatorPageViewModel operatorPageViewModel)
         {
-            OperatorPage = operatorPageViewModel;
+            OperatorPageViewModel = operatorPageViewModel;
         }
 
         private void OnPropertyChanged([CallerMemberName] string prop = "")

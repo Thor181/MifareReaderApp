@@ -13,7 +13,7 @@ namespace MifareReaderApp.DataLogic
 {
     public class UserLogic : BaseLogic
     {
-        public DbOperationResult<User> FindUser(string cardNumber)
+        public DbOperationResult<User> Find(string cardNumber)
         {
             var result = new DbOperationResult<User>();
             var users = DbContext.Users.Where(x => x.Card == cardNumber).ToList();
@@ -37,16 +37,18 @@ namespace MifareReaderApp.DataLogic
             return result;
         }
 
-        public DbOperationResult<User> AddUser(User user)
+        public DbOperationResult<User> Add(User user)
         {
-            var result = new DbOperationResult<User>();
+            var result = new DbOperationResult<User>() { Message = "Успешно сохранено" };
 
-            var userNotFound = FindUser(user.Card).NotFound;
+            var foundUser = Find(user.Card);
+            var userNotFound = foundUser.NotFound;
             if (userNotFound == false)
             {
-                result.IsSuccess = false;
-                result.Message = $"Пользователь с номером карты {user.Card} уже существует";
-                return result;
+                DbContext.ChangeTracker.Clear();
+                var updateResult = this.Update(user);
+
+                return updateResult;
             }
 
             user.Id = GenerateId();
@@ -58,6 +60,7 @@ namespace MifareReaderApp.DataLogic
             {
                 result.IsSuccess = false;
                 result.Message = $"Не обнаружен доступных записей {nameof(Place)}";
+
                 return result;
             }
                 
@@ -75,7 +78,49 @@ namespace MifareReaderApp.DataLogic
                 result.Message = e.Message;
             }
 
-            result.Message = "Успешно сохранено";
+            return result;
+        }
+
+        public DbOperationResult<User> Update(User user)
+        {
+            var result = new DbOperationResult<User>();
+
+            try
+            {
+                DbContext.Update(user);
+                DbContext.SaveChanges();
+
+                result.Message = $"Успешно обновлено";
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.LogError($"При обновлени сущности {nameof(User)} возникла ошибка", e);
+
+                result.IsSuccess = false;
+                result.Message = $"При обновлени сущности {nameof(User)} возникла ошибка\n{e.Message}";
+            }
+
+            return result;
+        }
+
+        public DbOperationResult<User> Delete(User user)
+        {
+            var result = new DbOperationResult<User>();
+
+            try
+            {
+                DbContext.Remove(user);
+                DbContext.SaveChanges();
+
+                result.Message = "Успешно удалено";
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.LogError($"При удалении сущности {nameof(User)} возникла ошибка", e);
+
+                result.IsSuccess = false;
+                result.Message = $"При удалении сущности {nameof(User)} возникла ошибка\n{e.Message}";
+            }
 
             return result;
         }

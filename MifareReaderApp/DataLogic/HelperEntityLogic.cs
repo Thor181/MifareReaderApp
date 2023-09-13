@@ -1,9 +1,4 @@
 ﻿using MifareReaderApp.Models.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MifareReaderApp.DataLogic
 {
@@ -21,6 +16,11 @@ namespace MifareReaderApp.DataLogic
             var entity = DbContext.Set<T>().FirstOrDefault();
 
             return entity;
+        }
+
+        public List<T> GetAll()
+        {
+            return DbContext.Set<T>().ToList();
         }
     }
 }

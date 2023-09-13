@@ -30,7 +30,6 @@ namespace MifareReaderApp
 
             var operatorPageVM = (OperatorTab.Content as OperatorPage)!.ViewModel;
             ViewModel.InitializeViewModels(operatorPageVM);
-
         }
 
         protected override void OnContentRendered(EventArgs e)

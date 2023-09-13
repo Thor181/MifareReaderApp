@@ -23,16 +23,12 @@ namespace MifareReaderApp.Stuff
                         var retry = callback.Invoke(result);
                         if (retry == true)
                         {
-                            var ex = new Exception("Next retry");
-                            ex.Data.Add("NextRetry", true);
-                            throw ex;
+                            await Task.Delay(interval);
+                            Logger.Instance.LogError($"Подключение на удалось ({entity}). Попытка {i}/{maxAttemptCount}");
+                            continue;
                         }
 
                         return;
-                    }
-                    catch (Exception ex) when (ex.Data["NextRetry"]?.Equals(true) == true)
-                    {
-                        await Task.Delay(interval);
                     }
                     catch (Exception e)
                     {

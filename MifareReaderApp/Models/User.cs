@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MifareReaderApp.Stuff.Extenstions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net.Http.Headers;
@@ -32,12 +33,11 @@ public partial class User
     public virtual Place Place { get; set; } = null!;
 
     [NotMapped]
-    private string _beforeDate = string.Empty!;
-    [NotMapped]
-    public string BeforeDate { get => Before.ToShortDateString(); set => _beforeDate = value; }
+    public string BeforeDate { get; set; } = null!;
 
     [NotMapped]
-    private string _beforeTime = string.Empty!;
+    public string BeforeTime { get ; set; } = null!;
+
     [NotMapped]
-    public string BeforeTime { get => Before.ToShortTimeString(); set => Before.AddDays(-1).AddTicks(1).Add(TimeSpan.Parse(value));  }
+    public string PlaceAsString { get; set; } = null!;
 }

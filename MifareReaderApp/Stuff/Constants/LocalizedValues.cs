@@ -17,6 +17,9 @@ namespace MifareReaderApp.Stuff.Constants
         public const string Id2 = "ID2";
         public const string BeforeDate = "Дата";
         public const string BeforeTime = "Время";
+        public const string Place = "Местонахождение";
+        public const string Staff = "Сотрудник";
+
 
         public static IEnumerator<(string FieldName, string FieldValue)> GetEnumerator()
         {
@@ -28,7 +31,7 @@ namespace MifareReaderApp.Stuff.Constants
             }
         }
 
-        public static string? First(Predicate<string> predicate)
+        public static string First(Predicate<string> predicate)
         {
             var enumerator = GetEnumerator();
             while (enumerator.MoveNext())
@@ -38,7 +41,7 @@ namespace MifareReaderApp.Stuff.Constants
                     return current.FieldValue;
             }
 
-            return null;
+            throw new InvalidOperationException("Не обнаружено локализованное значение");
         }
     }
 }

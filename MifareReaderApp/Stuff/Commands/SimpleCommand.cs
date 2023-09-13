@@ -11,6 +11,8 @@ namespace MifareReaderApp.Stuff.Commands
     public class SimpleCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
+        public delegate void SimpleCommandHandler(object? entity);
+        public SimpleCommandHandler CommandHandler { get; set; }
 
         public bool CanExecute(object? parameter)
         {
@@ -19,7 +21,7 @@ namespace MifareReaderApp.Stuff.Commands
 
         public virtual void Execute(object? parameter)
         {
-            throw new NotImplementedException();
+            CommandHandler?.Invoke(parameter);
         }
     }
 }

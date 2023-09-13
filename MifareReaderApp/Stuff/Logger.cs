@@ -22,9 +22,13 @@ namespace MifareReaderApp.Stuff
             CheckDirectoryExist();
         }
 
-        public void LogError(string message, Exception e)
+        public void LogError(string message, Exception e = null)
         {
-            var formattedMessage = $"[{DateTime.Now}] ({_errorLevel}) | {message} | {e.Message}";
+            var formattedMessage = $"[{DateTime.Now}] ({_errorLevel}) | {message}";
+
+            if (e != null)
+                formattedMessage += $" | {e.Message}";
+
             AppendLines(formattedMessage);
         }
 

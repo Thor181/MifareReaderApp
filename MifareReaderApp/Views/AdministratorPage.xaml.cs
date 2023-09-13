@@ -1,4 +1,5 @@
 ﻿using MifareReaderApp.Stuff;
+using MifareReaderApp.ViewModels;
 using MifareReaderApp.Views.Dialogs;
 using MifareReaderApp.Views.Interfaces;
 using System.Media;
@@ -9,10 +10,14 @@ namespace MifareReaderApp.Views
 {
     public partial class AdministratorPage : UserControl, IPage
     {
+        public AdministratorPageViewModel ViewModel { get; set; }
+
         public Visibility VisibilityProp { get; set; }
 
         public AdministratorPage()
         {
+            ViewModel = new AdministratorPageViewModel();
+
             VisibilityProp = Visibility.Collapsed;
 
             InitializeComponent();
