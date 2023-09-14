@@ -1,4 +1,5 @@
-﻿using MifareReaderApp.ViewModels;
+﻿using MifareReaderApp.Stuff;
+using MifareReaderApp.ViewModels;
 using MifareReaderApp.Views.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,17 +21,8 @@ namespace MifareReaderApp.Views
 {
     public partial class OperatorPage : UserControl, IPage
     {
-
-        public UIElement CustomChild
-        {
-            get { return (UIElement)this.GetValue(CustomChildProp); }
-            set { SetValue(CustomChildProp, value); }
-        }
-
-        public static readonly DependencyProperty CustomChildProp 
-            = DependencyProperty.Register("CustomChild", typeof(UIElement), typeof(OperatorPage), new PropertyMetadata(new PropertyChangedCallback(CustomChildChanged)));
-
         public OperatorPageViewModel ViewModel { get; set; }
+
 
         public OperatorPage()
         {
@@ -40,16 +32,7 @@ namespace MifareReaderApp.Views
 
         public void BeforeOpen()
         {
-            
-        }
 
-        public static void CustomChildChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is OperatorPage operatorPage)
-            {
-                operatorPage.CustomChildGrid.Children.Clear();
-                operatorPage.CustomChildGrid.Children.Add(e.NewValue as UIElement);
-            }
         }
     }
 }

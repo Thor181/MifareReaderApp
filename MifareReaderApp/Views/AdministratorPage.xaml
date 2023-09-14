@@ -8,30 +8,5 @@
              xmlns:constants="clr-namespace:MifareReaderApp.Stuff.Constants"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Name="PageView" DataContext="{Binding ElementName=PageView, Path=ViewModel}">
-    <Grid Background="Green">
-        <local:OperatorPage>
-            <local:OperatorPage.CustomChild >
-                <Grid IsEnabled="{Binding FieldsIsEnabled}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-
-                    
-                    <!--<TextBox Grid.Column="0" Margin="10" VerticalAlignment="Top" materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Place}" 
-                             Text="{Binding User.PlaceAsString}"/>-->
-                    <!--<TextBox Grid.Column="1" Margin="10" VerticalAlignment="Top" materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Staff}"
-             Text="{Binding ElementName=PageView, Path=ViewModel.User.Id1}"/>-->
-                </Grid>
-            </local:OperatorPage.CustomChild>
-        </local:OperatorPage>
-        <ComboBox ItemsSource="{Binding Places}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"></TextBlock>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-    </Grid>
+    <Grid Background="Green"></Grid>
 </UserControl>

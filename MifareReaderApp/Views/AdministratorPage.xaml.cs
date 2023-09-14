@@ -12,13 +12,9 @@ namespace MifareReaderApp.Views
     {
         public AdministratorPageViewModel ViewModel { get; set; }
 
-        public Visibility VisibilityProp { get; set; }
-
         public AdministratorPage()
         {
             ViewModel = new AdministratorPageViewModel();
-
-            VisibilityProp = Visibility.Collapsed;
 
             InitializeComponent();
         }
@@ -29,7 +25,6 @@ namespace MifareReaderApp.Views
             {
                 var dialog = new InputPasswordDialog("Введите пароль");
                 var result = dialog.ShowDialog();
-                VisibilityProp = result == true ? Visibility.Visible : Visibility.Collapsed;
             }
             else
             {

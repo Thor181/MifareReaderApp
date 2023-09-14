@@ -40,6 +40,13 @@ namespace MifareReaderApp.ViewModels
             get { return _user; }
             set { _user = value; OnPropertyChanged(); }
         }
+
+        private bool _adminMode;
+        public bool AdminMode { get => _adminMode; set { _adminMode = value; OnPropertyChanged(); } }
+
+        public List<Place> AvailablePlaces { get => GetAvailablePlaces(); }
+
+        
         #endregion
 
         #region Commands
@@ -49,9 +56,9 @@ namespace MifareReaderApp.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-
         public OperatorPageViewModel()
         {
+            
             SaveCommand = new SimpleCommand()
             {
                 CommandHandler = SaveUser
@@ -61,7 +68,6 @@ namespace MifareReaderApp.ViewModels
             {
                 CommandHandler = RemoveUser
             };
-
         }
 
         private void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -152,6 +158,13 @@ namespace MifareReaderApp.ViewModels
             User = null;
             FieldsIsEnabled = false;
             ButtonsIsEnabled = false;
+        }
+
+        private List<Place> GetAvailablePlaces()
+        {
+            using var placeLogic = new HelperEntityLogic<Place>();
+
+            return placeLogic.GetAll();
         }
     }
 }

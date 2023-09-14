@@ -26,6 +26,9 @@ namespace MifareReaderApp.Stuff
         public string LogsPath { get; set; } = "Logs\\";
         public string ConnectionString { get; set; } = "Server=localhost;Database=MfRADb;Trusted_Connection=True;Encrypt=false";
 
+        [JsonIgnore]
+        public bool AdminMode { get; set; }
+
         [JsonConstructor]
         public  AppConfig()
         {

@@ -6,19 +6,23 @@
              xmlns:constants="clr-namespace:MifareReaderApp.Stuff.Constants"
              xmlns:local="clr-namespace:MifareReaderApp.Views"
              xmlns:models="clr-namespace:MifareReaderApp.ViewModels"
+        xmlns:converters="clr-namespace:MifareReaderApp.Stuff.Converters"
             
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Name="OperatorPageView" 
              DataContext="{Binding ElementName=OperatorPageView, Path=ViewModel}">
+    
     <UserControl.Resources>
         <Style BasedOn="{StaticResource MaterialDesignOutlinedTextBox}" TargetType="TextBox">
             <Setter Property="Foreground" Value="Black" />
         </Style>
-        
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converters:BooleanToVisibilityConverter>
+        <converters:StringBooleanToBoolean x:Key="StringBooleanToBooleanConverter"></converters:StringBooleanToBoolean>
+        <converters:ComboBoxItemToId x:Key="ComboBoxItemToId"></converters:ComboBoxItemToId>
     </UserControl.Resources>
 
-    <Grid d:Background="{StaticResource MainBackgroundColor}" >
+    <Grid d:Background="{StaticResource MainBackgroundColor}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
@@ -59,8 +63,26 @@
                          Text="{Binding ElementName=OperatorPageView, Path=ViewModel.User.Id2}"/>
             </Grid>
 
-            <Grid x:Name="CustomChildGrid" IsEnabled="{Binding FieldsIsEnabled}">
-                
+            <Grid IsEnabled="{Binding FieldsIsEnabled}" Visibility="{Binding AdminMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0" Width="256" HorizontalAlignment="Right" Margin="0 0 5 0"
+                          ItemsSource="{Binding AvailablePlaces}" DisplayMemberPath="Name"
+                          SelectedItem="{Binding User.PlaceId, Converter={StaticResource ComboBoxItemToId}}"
+                          materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Place}" 
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                </ComboBox>
+
+                <ComboBox Grid.Column="1" Width="256" HorizontalAlignment="Left" Margin="5 0 0 0" 
+                          SelectedValue="{Binding User.Staff, Converter={StaticResource StringBooleanToBooleanConverter}, Mode=TwoWay}"
+                          materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Staff}" 
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                    <ComboBoxItem>Да</ComboBoxItem>
+                    <ComboBoxItem>Нет</ComboBoxItem>
+                </ComboBox>
             </Grid>
 
             <Grid IsEnabled="{Binding FieldsIsEnabled}">
@@ -99,6 +121,8 @@
                 </StackPanel>
 
             </Grid>
+
+          
 
             <Grid Margin="0 35" IsEnabled="{Binding ButtonsIsEnabled}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

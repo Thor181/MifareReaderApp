@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -49,6 +50,17 @@ namespace MifareReaderApp.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private HealthLogic _healthLogic;
+
+        public bool AdminMode
+        {
+            get => AppConfig.Instance.AdminMode; 
+            set
+            {
+                AppConfig.Instance.AdminMode = value; 
+                OnPropertyChanged();
+                OperatorPageViewModel.AdminMode = value;
+            }
+        }
 
         public MainWindowViewModel(MainWindow mainWindow)
         {
