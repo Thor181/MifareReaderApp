@@ -14,7 +14,7 @@ namespace MifareReaderApp.DataLogic.Stuff
 
         public void CheckDbAvailable()
         {
-            _ = Retry.Do(() => DbContext.Database.CanConnect(), OnConnectedHandler, TimeSpan.FromSeconds(5), int.MaxValue, "Database");
+            _ = Retry.Do(() => DbAvailable, OnConnectedHandler, TimeSpan.FromSeconds(5), int.MaxValue, "Database"); ;
         }
         
         public bool OnConnectedHandler(bool result)

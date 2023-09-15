@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MifareReaderApp.Models.Stuff;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,13 +25,17 @@ namespace MifareReaderApp.Stuff
 
         public string PortName { get; set; } = "COM1";
         public string LogsPath { get; set; } = "Logs\\";
-        public string ConnectionString { get; set; } = "Server=localhost;Database=MfRADb;Trusted_Connection=True;Encrypt=false";
+
+        public DbConnectionString DbConnectionString { get; set; } = new();
+
+        [JsonIgnore]
+        public string ConnectionString { get => DbConnectionString.ToString(); }
 
         [JsonIgnore]
         public bool AdminMode { get; set; }
 
         [JsonConstructor]
-        public  AppConfig()
+        public AppConfig()
         {
         }
 

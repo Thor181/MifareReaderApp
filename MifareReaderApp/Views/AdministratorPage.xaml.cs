@@ -21,15 +21,7 @@ namespace MifareReaderApp.Views
 
         public void BeforeOpen()
         {
-            if (AppConfig.Instance.PasswordSetted)
-            {
-                var dialog = new InputPasswordDialog("Введите пароль");
-                var result = dialog.ShowDialog();
-            }
-            else
-            {
-                MessageDialog.ShowDialog("Пароль не установлен");
-            }
+            
         }
     }
 }

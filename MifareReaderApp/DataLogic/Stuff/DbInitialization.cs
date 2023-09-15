@@ -20,6 +20,9 @@ namespace MifareReaderApp.DataLogic.Stuff
 
         private void InitializeHelperEntities<T>(params string[] names) where T : class, IHelperEntity, new()
         {
+            if (!DbAvailable)
+                return;
+
             foreach (var name in names)
             {
                 var set = DbContext.Set<T>();

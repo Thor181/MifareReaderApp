@@ -14,6 +14,8 @@ namespace MifareReaderApp
 
         public MainWindow()
         {
+            AppConfig.Instance.Initialize();
+
             ViewModel = new MainWindowViewModel(this);
             InitializeComponent();
 
@@ -22,8 +24,6 @@ namespace MifareReaderApp
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            AppConfig.Instance.Initialize();
-
             ViewModel.InitializePort();
 
             ViewModel.InitializeDatabase();

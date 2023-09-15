@@ -13,6 +13,8 @@ namespace MifareReaderApp.DataLogic
     {
         private bool _disposed = false;
 
+        public bool DbAvailable { get => GetDbAvailability(); }
+
         protected MfRADbContext DbContext { get; set; }
 
         public BaseLogic()
@@ -21,6 +23,11 @@ namespace MifareReaderApp.DataLogic
         }
 
         protected Guid GenerateId() => Guid.NewGuid();
+
+        public bool GetDbAvailability()
+        {
+            return DbContext.Database.CanConnect();
+        }
 
         #region Dispose
         public void Dispose()

@@ -1,12 +1,100 @@
 ﻿<UserControl x:Class="MifareReaderApp.Views.AdministratorPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MifareReaderApp.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:constants="clr-namespace:MifareReaderApp.Stuff.Constants"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Name="PageView" DataContext="{Binding ElementName=PageView, Path=ViewModel}">
-    <Grid Background="Green"></Grid>
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Name="PageView"
+             DataContext="{Binding ElementName=PageView, Path=ViewModel}">
+    <Grid Background="Green">
+
+        <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+                    SnapsToDevicePixels="True"
+                    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                    TabStripPlacement="Left">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto"
+                                Height="auto">
+                        <materialDesign:PackIcon Width="40"
+                                                 Height="40"
+                                                 HorizontalAlignment="Center"
+                                                 Kind="DatabaseEditOutline" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Margin="16">
+                    <TextBlock Margin="0,0,0,8"
+                               Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                               Text="Настройки базы данных" />
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Сервер:"></TextBlock>
+                            <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.DbServer}"
+                                     Text="{Binding ConnectionString.Server}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto"
+                                Height="auto">
+                        <materialDesign:PackIcon Width="40"
+                                                 Height="40"
+                                                 HorizontalAlignment="Center"
+                                                 Kind="Cog" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Margin="16">
+                    <TextBlock Margin="0,0,0,8"
+                               Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                               Text="Recent" />
+                    <TextBlock>
+                          <Run Text="tab 2 content. Default look and behaviors." />
+                          <LineBreak />
+                          <LineBreak />
+                          <Run FontStyle="Italic">
+                          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
+                        </Run>
+                    </TextBlock>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto"
+                                Height="auto">
+                        <materialDesign:PackIcon Width="40"
+                                                 Height="40"
+                                                 HorizontalAlignment="Center"
+                                                 Kind="Table" />
+                        <!--<TextBlock HorizontalAlignment="Center"
+                                   Text="Photos" />-->
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Margin="16">
+                    <TextBlock Margin="0,0,0,8"
+                               Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                               Text="Photos" />
+                    <TextBlock>
+          <Run Text="tab 3 content. Default look and behaviors." />
+          <LineBreak />
+          <LineBreak />
+          <Run FontStyle="Italic">
+          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
+        </Run>
+                    </TextBlock>
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
 </UserControl>

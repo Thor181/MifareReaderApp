@@ -14,6 +14,7 @@ using System.Windows;
 using MifareReaderApp.Stuff.Commands;
 using MifareReaderApp.Stuff.Extenstions;
 using MifareReaderApp.Stuff;
+using System.Windows.Data;
 
 namespace MifareReaderApp.ViewModels
 {
@@ -45,8 +46,6 @@ namespace MifareReaderApp.ViewModels
         public bool AdminMode { get => _adminMode; set { _adminMode = value; OnPropertyChanged(); } }
 
         public List<Place> AvailablePlaces { get => GetAvailablePlaces(); }
-
-        
         #endregion
 
         #region Commands
@@ -58,7 +57,7 @@ namespace MifareReaderApp.ViewModels
 
         public OperatorPageViewModel()
         {
-            
+
             SaveCommand = new SimpleCommand()
             {
                 CommandHandler = SaveUser
@@ -163,8 +162,9 @@ namespace MifareReaderApp.ViewModels
         private List<Place> GetAvailablePlaces()
         {
             using var placeLogic = new HelperEntityLogic<Place>();
+            var places = placeLogic.GetAll();
 
-            return placeLogic.GetAll();
+            return places;
         }
     }
 }

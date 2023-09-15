@@ -17,15 +17,28 @@ namespace MifareReaderApp.Views.Dialogs
 {
     public partial class InputPasswordDialog : Window
     {
+        public enum DialogAction
+        {
+            CheckPassword,
+            SetPassword
+        }
+
+        private Dictionary<DialogAction, Func<string, bool>> _actionsHandlersMap = new();
+
+        public DialogAction CurrentDialogAction { get; set; }
         public string Message { get; private set; }
 
-        public InputPasswordDialog(string message)
+        public InputPasswordDialog(string message, DialogAction action)
         {
             InitializeComponent();
+
+            _actionsHandlersMap.Add(DialogAction.CheckPassword, CheckPassword);
+            _actionsHandlersMap.Add(DialogAction.SetPassword, SetPassword);
 
             Owner = App.Current.MainWindow;
             DataContext = this;
             Message = message;
+            CurrentDialogAction = action;
         }
 
         /// <summary>
@@ -41,7 +54,9 @@ namespace MifareReaderApp.Views.Dialogs
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            var result = CheckPassword(PasswordBox.Password);
+            var result = _actionsHandlersMap[CurrentDialogAction].Invoke(PasswordBox.Password);
+
+            //var result = CheckPassword(PasswordBox.Password);
             
             this.DialogResult = result;
         }
@@ -53,6 +68,18 @@ namespace MifareReaderApp.Views.Dialogs
             if (!result.IsSuccess)
             {
                 MessageDialog.ShowDialog(result.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool SetPassword(string password)
+        {
+            var result = Password.HashAndWriteToFile(password);
+            if (!result.IsSuccess)
+            {
+                MessageDialog.ShowDialog(result.Message); 
                 return false;
             }
 

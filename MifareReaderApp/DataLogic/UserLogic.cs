@@ -16,6 +16,14 @@ namespace MifareReaderApp.DataLogic
         public DbOperationResult<User> Find(string cardNumber)
         {
             var result = new DbOperationResult<User>();
+
+            if (!DbAvailable)
+            {
+                result.IsSuccess = false;
+                result.Message = "База данных недоступна";
+                return result;
+            }
+
             var users = DbContext.Users.Where(x => x.Card == cardNumber).ToList();
 
             if (users.Count > 1)
@@ -40,6 +48,13 @@ namespace MifareReaderApp.DataLogic
         public DbOperationResult<User> Add(User user)
         {
             var result = new DbOperationResult<User>() { Message = "Успешно сохранено" };
+
+            if (!DbAvailable)
+            {
+                result.IsSuccess = false;
+                result.Message = "База данных недоступна";
+                return result;
+            }
 
             var foundUser = Find(user.Card);
             var userNotFound = foundUser.NotFound;
@@ -85,6 +100,13 @@ namespace MifareReaderApp.DataLogic
         {
             var result = new DbOperationResult<User>();
 
+            if (!DbAvailable)
+            {
+                result.IsSuccess = false;
+                result.Message = "База данных недоступна";
+                return result;
+            }
+
             try
             {
                 DbContext.Update(user);
@@ -106,6 +128,13 @@ namespace MifareReaderApp.DataLogic
         public DbOperationResult<User> Delete(User user)
         {
             var result = new DbOperationResult<User>();
+
+            if (!DbAvailable)
+            {
+                result.IsSuccess = false;
+                result.Message = "База данных недоступна";
+                return result;
+            }
 
             try
             {

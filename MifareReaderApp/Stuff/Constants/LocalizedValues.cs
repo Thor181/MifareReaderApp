@@ -20,6 +20,7 @@ namespace MifareReaderApp.Stuff.Constants
         public const string Place = "Местонахождение";
         public const string Staff = "Сотрудник";
 
+        public const string DbServer = "Сервер";
 
         public static IEnumerator<(string FieldName, string FieldValue)> GetEnumerator()
         {
