@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MifareReaderApp"
+             xmlns:converters="clr-namespace:MifareReaderApp.Stuff.Converters"
              xmlns:stuffModels="clr-namespace:MifareReaderApp.Models.Stuff"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:constants="clr-namespace:MifareReaderApp.Stuff.Constants"
@@ -12,6 +13,9 @@
              d:DesignWidth="800"
              Name="PageView"
              DataContext="{Binding ElementName=PageView, Path=ViewModel}">
+    <UserControl.Resources>
+        <converters:InvertedBoolean x:Key="InvertedBooleanConverter"></converters:InvertedBoolean>
+    </UserControl.Resources>
 
     <Grid Background="Green">
 
@@ -89,7 +93,8 @@
                                 <TextBlock Style="{StaticResource TitleFieldStyle}"
                                            Text="{x:Static constants:LocalizedValues.User}">
                                 </TextBlock>
-                                <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.User}"
+                                <TextBox IsEnabled="{Binding ConnectionString.TrustedConnection, Converter={StaticResource InvertedBooleanConverter}}"
+                                         materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.User}"
                                          Style="{StaticResource ValueFieldStyle}"
                                          Text="{Binding ConnectionString.User}" />
                             </StackPanel>
@@ -98,7 +103,8 @@
                                 <TextBlock Style="{StaticResource TitleFieldStyle}"
                                            Text="{x:Static constants:LocalizedValues.Password}">
                                 </TextBlock>
-                                <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Password}"
+                                <TextBox IsEnabled="{Binding ConnectionString.TrustedConnection, Converter={StaticResource InvertedBooleanConverter}}"
+                                         materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Password}"
                                          Style="{StaticResource ValueFieldStyle}"
                                          Text="{Binding ConnectionString.Password}" />
                             </StackPanel>
@@ -107,7 +113,8 @@
                                 <TextBlock Style="{StaticResource TitleFieldStyle}"
                                            Text="{x:Static constants:LocalizedValues.TrustedConnection}">
                                 </TextBlock>
-                                <CheckBox Width="100"
+                                <CheckBox x:Name="TrustedConnectionCheckbox"
+                                          Width="100"
                                           IsChecked="{Binding ConnectionString.TrustedConnection}"
                                           VerticalAlignment="Center" />
                             </StackPanel>
@@ -150,8 +157,8 @@
                                Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                                Text="Общие настройки" />
                     <StackPanel>
-                        
-                        <StackPanel Orientation="Horizontal" >
+
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Порт: "
                                        VerticalAlignment="Center"></TextBlock>
                             <TextBox Width="130"
@@ -160,7 +167,7 @@
                         </StackPanel>
                         <Button Width="270"
                                 Command="{Binding ChangeAdminPasswordCommand}">Изменить пароль администратора</Button>
-                        
+
                     </StackPanel>
 
                 </StackPanel>
@@ -176,8 +183,9 @@
                                                  Kind="Table" />
                     </StackPanel>
                 </TabItem.Header>
-                
-                <Grid Margin="16" IsEnabled="{Binding PageIsEnabled}">
+
+                <Grid Margin="16"
+                      IsEnabled="{Binding PageIsEnabled}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
                         <RowDefinition Height="40" />
@@ -254,7 +262,7 @@
                                  VerticalAlignment="top"
                                  Visibility="{Binding ProgressVisibility}" />
 
-                  
+
                 </Grid>
             </TabItem>
 

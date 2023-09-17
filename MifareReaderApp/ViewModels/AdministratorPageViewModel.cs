@@ -118,6 +118,8 @@ namespace MifareReaderApp.ViewModels
             AppliedUsers = new();
             AppliedQrEvents = new();
             AppliedCardEvents = new();
+
+            ConnectionString.OnConfigChange += AppConfig.Instance.Save;
         }
 
         private void InitializeCommands()
