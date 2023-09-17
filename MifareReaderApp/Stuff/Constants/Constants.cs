@@ -1,4 +1,6 @@
-﻿namespace MifareReaderApp.Stuff.Constants
+﻿using MifareReaderApp.Models;
+
+namespace MifareReaderApp.Stuff.Constants
 {
     public class Constants
     {
@@ -10,5 +12,12 @@
             {"Да", true},
             {"Нет", false},
         };
+
+        public static Dictionary<string, string> DatabaseTablesLocalizedNames = new()
+        {
+            { nameof(MfRADbContext.Users), "Пользователи" }
+        };
+
+        public static double MaxScreenHeight = System.Windows.SystemParameters.PrimaryScreenHeight - 200;
     }
 }

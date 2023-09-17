@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using MifareReaderApp.DataLogic.Stuff;
 using MifareReaderApp.Models;
 using MifareReaderApp.Stuff;
+using MifareReaderApp.Stuff.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +30,20 @@ namespace MifareReaderApp.DataLogic
 
         public bool GetDbAvailability()
         {
+            DbContext = new MfRADbContext();
             return DbContext.Database.CanConnect();
+        }
+
+        public virtual DbOperationResult<List<T>> GetAll<T>() where T : class
+        {
+            var result = new DbOperationResult<List<T>>();
+
+            if (!DbAvailable)
+                return result;
+
+            result.Entity = DbContext.Set<T>().ToList();
+
+            return result;
         }
 
         #region Dispose

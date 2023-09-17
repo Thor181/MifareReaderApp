@@ -14,9 +14,9 @@
 
         <ScrollViewer Grid.Row="0">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="5 0"
-                   TextWrapping="Wrap" TextAlignment="Center"
+                   TextWrapping="Wrap" TextAlignment="Justify"
                    Text="{Binding Message}"
-                   FontSize="18">
+                   FontSize="12" >
                 </TextBlock>
             </ScrollViewer>
 

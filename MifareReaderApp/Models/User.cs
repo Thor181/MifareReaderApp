@@ -1,4 +1,6 @@
-﻿using MifareReaderApp.Stuff.Extenstions;
+﻿using MifareReaderApp.Models.AppliedModes;
+using MifareReaderApp.Models.Interfaces;
+using MifareReaderApp.Stuff.Extenstions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +8,7 @@ using System.Net.Http.Headers;
 
 namespace MifareReaderApp.Models;
 
-public partial class User
+public partial class User : IEditableModel
 {
     public Guid Id { get; set; }
 
@@ -40,4 +42,5 @@ public partial class User
 
     [NotMapped]
     public string PlaceAsString { get; set; } = null!;
+
 }

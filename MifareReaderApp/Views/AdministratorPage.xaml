@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:MifareReaderApp.Views"
+             xmlns:local="clr-namespace:MifareReaderApp"
+             xmlns:stuffModels="clr-namespace:MifareReaderApp.Models.Stuff"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:constants="clr-namespace:MifareReaderApp.Stuff.Constants"
              mc:Ignorable="d"
@@ -11,7 +12,33 @@
              d:DesignWidth="800"
              Name="PageView"
              DataContext="{Binding ElementName=PageView, Path=ViewModel}">
+
     <Grid Background="Green">
+
+        <Grid.Resources>
+            <Style x:Key="TitleFieldStyle"
+                   TargetType="TextBlock">
+                <Setter Property="FontSize"
+                        Value="16"></Setter>
+                <Setter Property="Margin"
+                        Value="0 0 10 0"></Setter>
+                <Setter Property="Width"
+                        Value="150" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+            </Style>
+
+            <Style x:Key="ValueFieldStyle"
+                   TargetType="TextBox"
+                   BasedOn="{StaticResource MaterialDesignTextBox}">
+                <Setter Property="FontSize"
+                        Value="16"></Setter>
+                <Setter Property="Width"
+                        Value="150"></Setter>
+                <Setter Property="VerticalAlignment"
+                        Value="Center"></Setter>
+            </Style>
+        </Grid.Resources>
 
         <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
                     SnapsToDevicePixels="True"
@@ -32,13 +59,79 @@
                     <TextBlock Margin="0,0,0,8"
                                Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                                Text="Настройки базы данных" />
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Сервер:"></TextBlock>
-                            <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.DbServer}"
-                                     Text="{Binding ConnectionString.Server}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource TitleFieldStyle}"
+                                           Text="{x:Static constants:LocalizedValues.DbServer}">
+                                </TextBlock>
+                                <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.DbServer}"
+                                         Style="{StaticResource ValueFieldStyle}"
+                                         Text="{Binding ConnectionString.Server}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource TitleFieldStyle}"
+                                           Text="{x:Static constants:LocalizedValues.Database}">
+                                </TextBlock>
+                                <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Database}"
+                                         Style="{StaticResource ValueFieldStyle}"
+                                         Text="{Binding ConnectionString.Database}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource TitleFieldStyle}"
+                                           Text="{x:Static constants:LocalizedValues.User}">
+                                </TextBlock>
+                                <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.User}"
+                                         Style="{StaticResource ValueFieldStyle}"
+                                         Text="{Binding ConnectionString.User}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource TitleFieldStyle}"
+                                           Text="{x:Static constants:LocalizedValues.Password}">
+                                </TextBlock>
+                                <TextBox materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.Password}"
+                                         Style="{StaticResource ValueFieldStyle}"
+                                         Text="{Binding ConnectionString.Password}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource TitleFieldStyle}"
+                                           Text="{x:Static constants:LocalizedValues.TrustedConnection}">
+                                </TextBlock>
+                                <CheckBox Width="100"
+                                          IsChecked="{Binding ConnectionString.TrustedConnection}"
+                                          VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource TitleFieldStyle}"
+                                           Text="{x:Static constants:LocalizedValues.Encrypt}">
+                                </TextBlock>
+                                <CheckBox Width="100"
+                                          IsChecked="{Binding ConnectionString.Encrypt}"
+                                          VerticalAlignment="Center" />
+                            </StackPanel>
+
                         </StackPanel>
-                    </StackPanel>
+
+                        <Grid Grid.Column="1">
+                            <Button Width="250"
+                                    VerticalAlignment="Top"
+                                    Margin="0 10 0 0"
+                                    Command="{Binding InitializeDatabaseCommand}">Инициализировать базу данных</Button>
+                        </Grid>
+
+                    </Grid>
+
                 </StackPanel>
             </TabItem>
 
@@ -55,15 +148,21 @@
                 <StackPanel Margin="16">
                     <TextBlock Margin="0,0,0,8"
                                Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                               Text="Recent" />
-                    <TextBlock>
-                          <Run Text="tab 2 content. Default look and behaviors." />
-                          <LineBreak />
-                          <LineBreak />
-                          <Run FontStyle="Italic">
-                          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
-                        </Run>
-                    </TextBlock>
+                               Text="Общие настройки" />
+                    <StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" >
+                            <TextBlock Text="Порт: "
+                                       VerticalAlignment="Center"></TextBlock>
+                            <TextBox Width="130"
+                                     VerticalAlignment="Center"
+                                     Text="{Binding PortName}"></TextBox>
+                        </StackPanel>
+                        <Button Width="270"
+                                Command="{Binding ChangeAdminPasswordCommand}">Изменить пароль администратора</Button>
+                        
+                    </StackPanel>
+
                 </StackPanel>
             </TabItem>
 
@@ -75,26 +174,92 @@
                                                  Height="40"
                                                  HorizontalAlignment="Center"
                                                  Kind="Table" />
-                        <!--<TextBlock HorizontalAlignment="Center"
-                                   Text="Photos" />-->
                     </StackPanel>
                 </TabItem.Header>
-                <StackPanel Margin="16">
+                
+                <Grid Margin="16" IsEnabled="{Binding PageIsEnabled}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
                     <TextBlock Margin="0,0,0,8"
+                               Grid.Row="0"
                                Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                               Text="Photos" />
-                    <TextBlock>
-          <Run Text="tab 3 content. Default look and behaviors." />
-          <LineBreak />
-          <LineBreak />
-          <Run FontStyle="Italic">
-          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
-        </Run>
-                    </TextBlock>
-                </StackPanel>
+                               Text="Таблицы" />
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Top">
+                            <ComboBox ItemsSource="{Binding AvailableTables}"
+                                      DisplayMemberPath="Key"
+                                      SelectedValuePath="Key"
+                                      Width="150"
+                                      Margin="0 0 5 0"
+                                      SelectedValue="{Binding SelectedTable}"></ComboBox>
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="От:  "></TextBlock>
+                            <DatePicker Name="DatePickerFrom"
+                                        SelectedDate="{Binding DateFilter.DateFrom}"
+                                        SelectedDateFormat="Short"
+                                        Width="100"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 5 0"></DatePicker>
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="До:  "></TextBlock>
+                            <DatePicker Name="DatePickerTo"
+                                        SelectedDate="{Binding DateFilter.DateTo}"
+                                        SelectedDateFormat="Short"
+                                        Width="100"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 5 0"></DatePicker>
+                            <Button  Command="{Binding FilterTableValuesCommand}">Фильтр</Button>
+                        </StackPanel>
+
+                        <Button Padding="4"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                Grid.Column="1"
+                                Command="{Binding ExportToExcelCommand}">
+
+                            <materialDesign:PackIcon Width="25"
+                                                     Height="25"
+                                                     Kind="FileExcel" />
+                        </Button>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <ScrollViewer ScrollViewer.CanContentScroll="True"
+                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                            <DataGrid x:Name="TablesDataGrid"
+                                      AutoGenerateColumns="True"
+                                      ItemsSource="{Binding SelectedTableValues}"
+                                      IsReadOnly="True"
+                                      AutoGeneratingColumn="TablesDataGrid_AutoGeneratingColumn"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False">
+                            </DataGrid>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <ProgressBar IsIndeterminate="True"
+                                 VerticalAlignment="top"
+                                 Visibility="{Binding ProgressVisibility}" />
+
+                  
+                </Grid>
             </TabItem>
 
         </TabControl>
 
     </Grid>
+
 </UserControl>

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MifareReaderApp.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace MifareReaderApp.Models;
 
-public partial class Qrevent
+public partial class Qrevent : IEditableModel
 {
     public Guid Id { get; set; }
 

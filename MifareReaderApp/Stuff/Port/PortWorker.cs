@@ -47,7 +47,7 @@ namespace MifareReaderApp.Stuff
 
         private void OpenPort()
         {
-            _ = Retry.Do(() => { Port.Open(); return true; }, OnPortOpen, TimeSpan.FromSeconds(5), 99, "Port");
+            _ = Retry.Do(() => { Port.PortName = PortName; Port.Open(); return true; }, OnPortOpen, TimeSpan.FromSeconds(5), 99, "Port");
         }
 
         private bool OnPortOpen(bool result)

@@ -1,5 +1,6 @@
 ﻿using MifareReaderApp.Models;
 using MifareReaderApp.Models.Interfaces;
+using MifareReaderApp.Stuff.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,27 @@ namespace MifareReaderApp.DataLogic.Stuff
             }
 
             DbContext.SaveChanges();
+        }
+
+        public BaseResult EnsureCreated()
+        {
+            var result = new BaseResult() { Message = "База данных успешно создана" };
+
+            try
+            {
+                var dbCreated = DbContext.Database.EnsureCreated();
+                if (dbCreated == true)
+                    Initialize();
+                else
+                    result.Message = "База данных уже существует";
+            }
+            catch (Exception e)
+            {
+                result.IsSuccess = false;
+                result.Message = $"Во время создания/инициализации базы данных произошла ошибка\n{e.Message}";
+            }
+
+            return result;
         }
     }
 }

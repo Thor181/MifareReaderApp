@@ -17,11 +17,18 @@ namespace MifareReaderApp.Views
             ViewModel = new AdministratorPageViewModel();
 
             InitializeComponent();
+
+            ViewModel.TableDataGrid = this.TablesDataGrid;
         }
 
         public void BeforeOpen()
         {
             
+        }
+
+        private void TablesDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            ViewModel.OnTablesDataGridColumnGenerating(sender, e);
         }
     }
 }

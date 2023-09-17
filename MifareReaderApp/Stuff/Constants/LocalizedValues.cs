@@ -21,6 +21,11 @@ namespace MifareReaderApp.Stuff.Constants
         public const string Staff = "Сотрудник";
 
         public const string DbServer = "Сервер";
+        public const string Database = "База";
+        public const string User = "Пользователь";
+        public const string Password = "Пароль";
+        public const string TrustedConnection = "Trusted connection";
+        public const string Encrypt = "Шифрование";
 
         public static IEnumerator<(string FieldName, string FieldValue)> GetEnumerator()
         {

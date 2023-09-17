@@ -1,10 +1,11 @@
 ﻿
+using MifareReaderApp.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace MifareReaderApp.Models;
 
-public partial class CardEvent
+public partial class CardEvent : IEditableModel
 {
     public int Id { get; set; }
 

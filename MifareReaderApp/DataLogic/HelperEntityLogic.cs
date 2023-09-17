@@ -6,7 +6,7 @@ namespace MifareReaderApp.DataLogic
     {
         public T? Get(string name)
         {
-            if (GetDbAvailability())
+            if (!GetDbAvailability())
                 return null;
 
             var entity = DbContext.Set<T>().SingleOrDefault(x => x.Name == name);
@@ -16,7 +16,7 @@ namespace MifareReaderApp.DataLogic
 
         public T? First()
         {
-            if (GetDbAvailability())
+            if (!GetDbAvailability())
                 return null;
 
             var entity = DbContext.Set<T>().FirstOrDefault();

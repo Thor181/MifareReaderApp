@@ -9,10 +9,9 @@
         xmlns:statusControls="clr-namespace:MifareReaderApp.Views.Controls.Status"
         xmlns:converters="clr-namespace:MifareReaderApp.Stuff.Converters"
         mc:Ignorable="d" 
-        MinWidth="800" MinHeight="450" ResizeMode="NoResize"
-        MaxWidth="800" MaxHeight="450"
-        Title="MainWindow" Height="450" Width="800" Name="MainWindowView" DataContext="{Binding ElementName=MainWindowView, Path=ViewModel}" WindowStartupLocation="CenterScreen">
+        Title="MfRA" Height="450" Width="800" Name="MainWindowView" DataContext="{Binding ElementName=MainWindowView, Path=ViewModel}" WindowStartupLocation="CenterScreen">
 
+    
     <Window.Resources>
         <converters:InvertedBoolean x:Key="InvertedBoolean"></converters:InvertedBoolean>
     </Window.Resources>

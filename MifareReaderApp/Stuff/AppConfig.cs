@@ -23,10 +23,35 @@ namespace MifareReaderApp.Stuff
 
         private string _configPath = "Config\\Config.json";
 
-        public string PortName { get; set; } = "COM1";
+        private string _portName = "COM1";
+        public string PortName
+        {
+            get
+            {
+                return _portName;
+            }
+            set
+            {
+                _portName = value;
+                Save();
+            }
+        }
+
         public string LogsPath { get; set; } = "Logs\\";
 
-        public DbConnectionString DbConnectionString { get; set; } = new();
+        private DbConnectionString _dbConnectionString = new();
+        public DbConnectionString DbConnectionString
+        {
+            get
+            {
+                return _dbConnectionString;
+            }
+            set
+            {
+                _dbConnectionString = value;
+                Save();
+            }
+        }
 
         [JsonIgnore]
         public string ConnectionString { get => DbConnectionString.ToString(); }

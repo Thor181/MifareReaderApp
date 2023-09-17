@@ -55,8 +55,6 @@ namespace MifareReaderApp.Views.Dialogs
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
             var result = _actionsHandlersMap[CurrentDialogAction].Invoke(PasswordBox.Password);
-
-            //var result = CheckPassword(PasswordBox.Password);
             
             this.DialogResult = result;
         }
