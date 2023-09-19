@@ -132,7 +132,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 7 0 0">
 
-                        <DatePicker Name="DatePick"
+                        <DatePicker Name="DatePick" Language="Ru"
                                     SelectedDateFormat="Short"
                                     Width="140"
                                     Margin="0 0 5 0"

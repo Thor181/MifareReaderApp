@@ -106,11 +106,11 @@ namespace MifareReaderApp.ViewModels
 
                 var localizedValues = new (string PropName, string PropValue)[]
                 {
-                    user.Name.GetLocalizedPropInfo<User>(x => x.Name),
-                    user.Name2.GetLocalizedPropInfo<User>(x => x.Name2),
-                    user.Surname.GetLocalizedPropInfo<User>(x => x.Surname),
-                    user.Id1.GetLocalizedPropInfo<User>(x => x.Id1),
-                    user.Id2.GetLocalizedPropInfo<User>(x => x.Id2),
+                    //user.Name.GetLocalizedPropInfo<User>(x => x.Name),
+                    //user.Name2.GetLocalizedPropInfo<User>(x => x.Name2),
+                    //user.Surname.GetLocalizedPropInfo<User>(x => x.Surname),
+                    //user.Id1.GetLocalizedPropInfo<User>(x => x.Id1),
+                    //user.Id2.GetLocalizedPropInfo<User>(x => x.Id2),
                     user.Card.GetLocalizedPropInfo<User>(x => x.Card)
                 };
 
