@@ -1,4 +1,5 @@
 ﻿using MifareReaderApp.Models;
+using System.IO;
 
 namespace MifareReaderApp.Stuff.Constants
 {
@@ -19,5 +20,9 @@ namespace MifareReaderApp.Stuff.Constants
         };
 
         public static double MaxScreenHeight = System.Windows.SystemParameters.PrimaryScreenHeight - 200;
+
+        public static string MainFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MfRA");
+
+        public static bool OnDeserialization = false;
     }
 }

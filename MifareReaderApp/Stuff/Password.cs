@@ -13,7 +13,7 @@ namespace MifareReaderApp.Stuff
         private const string L = "rea";
         private const string T = "far";
 
-        private const string FileName = "slt.at";
+        private static string FileName = $"{Constants.Constants.MainFolderPath}\\slt.at";
 
         public static PasswordCheckResult HashAndWriteToFile(string password)
         {

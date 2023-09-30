@@ -21,7 +21,7 @@ namespace MifareReaderApp.Stuff
         [JsonIgnore]
         public bool DatabaseInitialized { get; set; } = false;
 
-        private string _configPath = "Config\\Config.json";
+        private string _configPath = $"{Constants.Constants.MainFolderPath}\\Config\\Config.json";
 
         private string _portName = "COM1";
         public string PortName
@@ -37,7 +37,8 @@ namespace MifareReaderApp.Stuff
             }
         }
 
-        public string LogsPath { get; set; } = "Logs\\";
+        [JsonIgnore]
+        public string LogsPath => $"{Constants.Constants.MainFolderPath}\\Logs\\";
 
         private DbConnectionString _dbConnectionString = new();
         public DbConnectionString DbConnectionString
@@ -89,15 +90,31 @@ namespace MifareReaderApp.Stuff
 
         public void Save()
         {
-            var serialized = JsonSerializer.Serialize(Instance);
-            File.WriteAllText(_configPath, serialized);
+            if (!Constants.Constants.OnDeserialization)
+            {
+                var serialized = JsonSerializer.Serialize(Instance);
+                File.WriteAllText(_configPath, serialized);
+            }
         }
 
         public void Load()
         {
-            var json = File.ReadAllText(_configPath);
-            var deserialized = JsonSerializer.Deserialize<AppConfig>(json);
-            _instance = deserialized;
+            try
+            {
+                Constants.Constants.OnDeserialization = true;
+                var json = File.ReadAllText(_configPath);
+                var deserialized = JsonSerializer.Deserialize<AppConfig>(json);
+                _instance = deserialized;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.LogError("При загрузке конфига возникла ошибка", e);
+                throw;
+            }
+            finally
+            {
+                Constants.Constants.OnDeserialization = false;
+            }
         }
 
     }
