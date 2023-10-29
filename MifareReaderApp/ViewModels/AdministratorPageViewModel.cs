@@ -58,6 +58,7 @@ namespace MifareReaderApp.ViewModels
         public List<Place> Places { get; set; }
 
         public string PortName { get => AppConfig.Instance.PortName; set => AppConfig.Instance.PortName = value; }
+        public int BaudRate { get => AppConfig.Instance.BaudRate; set => AppConfig.Instance.BaudRate = value; }
 
         public DbConnectionString ConnectionString
         {

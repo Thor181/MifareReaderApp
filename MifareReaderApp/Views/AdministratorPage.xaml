@@ -158,14 +158,23 @@
                                Text="Общие настройки" />
                     <StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" >
                             <TextBlock Text="Порт: "
+                                       Width="160"
                                        VerticalAlignment="Center"></TextBlock>
                             <TextBox Width="130"
                                      VerticalAlignment="Center"
                                      Text="{Binding PortName}"></TextBox>
                         </StackPanel>
-                        <Button Width="270"
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Скорость передачи данных: "
+                                       Width="160"
+                                       VerticalAlignment="Center"></TextBlock>
+                            <TextBox Width="130"
+                                     VerticalAlignment="Center"
+                                     Text="{Binding BaudRate}"></TextBox>
+                        </StackPanel>
+                        <Button Width="270" Margin="0 10 0 0"
                                 Command="{Binding ChangeAdminPasswordCommand}">Изменить пароль администратора</Button>
 
                     </StackPanel>

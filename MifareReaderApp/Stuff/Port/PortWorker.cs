@@ -34,10 +34,11 @@ namespace MifareReaderApp.Stuff
         }
 
         private string PortName => AppConfig.Instance.PortName;
+        private int BaudRate => AppConfig.Instance.BaudRate;
 
         public PortWorker()
         {
-            Port = new SerialPort(PortName, 9600, Parity.None, 8, StopBits.One);
+            Port = new SerialPort(PortName, BaudRate, Parity.None, 8, StopBits.One);
 
             Port.DataReceived += Port_DataReceived;
             Port.ErrorReceived += Port_ErrorReceived;

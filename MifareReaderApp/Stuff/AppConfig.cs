@@ -37,6 +37,20 @@ namespace MifareReaderApp.Stuff
             }
         }
 
+        private int _baudRate = 9600;
+        public int BaudRate
+        {
+            get
+            {
+                return _baudRate;
+            }
+            set
+            {
+                _baudRate = value;
+                Save();
+            }
+        }
+
         [JsonIgnore]
         public string LogsPath => $"{Constants.Constants.MainFolderPath}\\Logs\\";
 
