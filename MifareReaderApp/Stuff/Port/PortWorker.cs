@@ -39,7 +39,7 @@ namespace MifareReaderApp.Stuff
         public PortWorker()
         {
             Port = new SerialPort(PortName, BaudRate, Parity.None, 8, StopBits.One);
-
+            Port.NewLine = "\r\n";
             Port.DataReceived += Port_DataReceived;
             Port.ErrorReceived += Port_ErrorReceived;
 
@@ -69,7 +69,22 @@ namespace MifareReaderApp.Stuff
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            var data = Port.ReadExisting();
+            var data = "";
+
+            //int bytes = Port.BytesToRead;
+            //byte[] buffer = new byte[1024];
+            //Port.Read(buffer, 0, buffer.Length);
+            //data = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+
+            data = Port.ReadLine();
+            //if (BaudRate < 9000)
+
+            //else
+            //{
+            //    Thread.Sleep(100);
+            //    
+            //}
+            //data = Port.ReadExisting();
             OnPortDataReceived?.Invoke(data);
         }
 
