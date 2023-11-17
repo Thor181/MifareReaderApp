@@ -1,21 +1,12 @@
-﻿using MifareReaderApp.DataLogic;
-using MifareReaderApp.DataLogic.Stuff;
+﻿using MifareReaderApp.DataLogic.Stuff;
 using MifareReaderApp.Stuff;
 using MifareReaderApp.Stuff.Port;
-using MifareReaderApp.Views;
 using MifareReaderApp.Views.Controls.Status;
 using MifareReaderApp.Views.Dialogs;
 using MifareReaderApp.Views.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace MifareReaderApp.ViewModels
 {
