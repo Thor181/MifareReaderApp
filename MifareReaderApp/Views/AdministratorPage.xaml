@@ -276,7 +276,8 @@
                             </Button>
                             <Button Margin="5 0 0 0"
                                     Padding="5 0"
-                                    Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Command="{Binding EditCommand}" CommandParameter="{Binding TableDataGrid.SelectedValue}">
                                 <materialDesign:PackIcon HorizontalAlignment="Center"
                                                          Width="25"
                                                          Height="25"

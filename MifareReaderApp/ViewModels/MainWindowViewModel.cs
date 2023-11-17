@@ -74,10 +74,13 @@ namespace MifareReaderApp.ViewModels
             }
         }
 
+        public static Action<string> OnPortDataReceivedInternal;
+
 
         public MainWindowViewModel(MainWindow mainWindow)
         {
             MainWindow = mainWindow;
+            OnPortDataReceivedInternal = OnPortDataReceived;
         }
 
         #region Port
@@ -95,6 +98,7 @@ namespace MifareReaderApp.ViewModels
             else
                 PortStatusControl.ControlStatus = Stuff.Status.ControlStatus.RedStatus;
         }
+
 
         private void OnPortDataReceived(string data)
         {

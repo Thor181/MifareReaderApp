@@ -7,11 +7,13 @@ using MifareReaderApp.Models.Interfaces;
 using MifareReaderApp.Models.Stuff;
 using MifareReaderApp.Stuff;
 using MifareReaderApp.Stuff.Commands;
+using MifareReaderApp.Stuff.Results;
 using MifareReaderApp.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,12 +92,13 @@ namespace MifareReaderApp.ViewModels
         public SimpleCommand FilterTableValuesCommand { get; set; }
         public SimpleCommand ExportToExcelCommand { get; set; }
         public SimpleCommand SearchCommand { get; set; }
+        public SimpleCommand EditCommand { get; set; }
         #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
-        public Dictionary<string, Action<DateTime, DateTime>> AvailableTables { get; set; }
+        public Dictionary<string, Action<DateTime, DateTime, string>> AvailableTables { get; set; }
 
         private string _selectedTable;
         public string SelectedTable
@@ -108,7 +111,7 @@ namespace MifareReaderApp.ViewModels
             {
                 _selectedTable = value;
 
-                AvailableTables[value].Invoke(DateFilter.DateFrom, DateFilter.DateTo);
+                AvailableTables[value].Invoke(DateFilter.DateFrom, DateFilter.DateTo, null);
             }
         }
 
@@ -162,6 +165,11 @@ namespace MifareReaderApp.ViewModels
             {
                 CommandHandler = SearchUser
             };
+            
+            EditCommand = new SimpleCommand()
+            {
+                CommandHandler = EditUser
+            };
         }
 
         private void SelectedTableValues_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -174,7 +182,7 @@ namespace MifareReaderApp.ViewModels
             using var helperLogic = new HelperEntityLogic<Place>();
             Places = helperLogic.GetAll();
 
-            AvailableTables = new Dictionary<string, Action<DateTime, DateTime>>
+            AvailableTables = new()
             {
                 {"Пользователи (Users)", LoadUsers },
                 {"QREvents", LoadQREvents },
@@ -228,11 +236,31 @@ namespace MifareReaderApp.ViewModels
             e.Column.Header = name;
         }
 
-        private void LoadUsers(DateTime from, DateTime to)
+        private void LoadUsers(DateTime from, DateTime to, string searchString)
         {
             using var logic = new UserLogic();
 
-            var dbResult = logic.GetAllIncluded(x => x.Dt >= from && x.Dt <= to);
+            DbOperationResult<List<User>> dbResult;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                var lowerSearchString = searchString.ToLower();
+
+                Expression<Func<User, bool>> filterPredicate = (User x) =>
+                x.Name.ToLower().Contains(lowerSearchString)
+                || x.Name2.ToLower().Contains(lowerSearchString)
+                || x.Surname.ToLower().Contains(lowerSearchString)
+                || x.Card.ToLower().Contains(lowerSearchString)
+                || x.Id1.ToLower().Contains(lowerSearchString)
+                || x.Id2.ToLower().Contains(lowerSearchString)
+                || x.Place.Name.ToLower().Contains(lowerSearchString)
+                && (x.Dt >= from && x.Dt <= to);
+                dbResult = logic.GetAllIncluded(filterPredicate);
+            }
+            else
+            {
+                dbResult = logic.GetAllIncluded(x => x.Dt >= from && x.Dt <= to);
+            }
+            
             if (!dbResult.IsSuccess)
             {
                 MessageDialog.ShowDialog(dbResult.Message);
@@ -252,7 +280,7 @@ namespace MifareReaderApp.ViewModels
             IsSearchVisible = true;
         }
 
-        private void LoadQREvents(DateTime from, DateTime to)
+        private void LoadQREvents(DateTime from, DateTime to, string searchString)
         {
             using var logic = new QREventLogic();
 
@@ -275,7 +303,7 @@ namespace MifareReaderApp.ViewModels
             IsSearchVisible = false;
         }
 
-        private void LoadCardEvents(DateTime from, DateTime to)
+        private void LoadCardEvents(DateTime from, DateTime to, string searchString)
         {
             using var logic = new CardEventLogic();
 
@@ -300,7 +328,7 @@ namespace MifareReaderApp.ViewModels
 
         private void FilterTableValues(object? parameter)
         {
-            AvailableTables[SelectedTable].Invoke(DateFilter.DateFrom, DateFilter.DateTo);
+            AvailableTables[SelectedTable].Invoke(DateFilter.DateFrom, DateFilter.DateTo, null);
         }
 
         private void ExportToExcel(object? parameter)
@@ -347,7 +375,24 @@ namespace MifareReaderApp.ViewModels
 
         private void SearchUser(object? parameter)
         {
+            var dialog = new InputDialog("Введите поисковый запрос");
+            var request = dialog.ShowDialog();
+            LoadUsers(DateFilter.DateFrom, DateFilter.DateTo, request);
+        }
 
+        private void EditUser(object? parameter)
+        {
+            var card = (parameter as AppliedUser)?.Card;
+            if (!string.IsNullOrEmpty(card))
+            {
+                MainWindowViewModel.OnPortDataReceivedInternal?.Invoke($"[{card}]");
+                
+                MessageDialog.ShowDialog($"Запись с номером карты \"{card}\" выбрана для редактирования.\n\nПерейдите на вкладку \"Оператор\" для продолжения.");
+            }
+            else
+            {
+                MessageDialog.ShowDialog("У выбранной записи не обнаружен номер карты");
+            }
         }
     }
 }
