@@ -23,6 +23,7 @@ namespace MifareReaderApp.Views
     {
         public OperatorPageViewModel ViewModel { get; set; }
 
+        private static DateTime PersistentDate { get; set; }
 
         public OperatorPage()
         {
@@ -32,6 +33,20 @@ namespace MifareReaderApp.Views
 
         public void BeforeOpen()
         {
+
+        }
+
+        private void DatePick_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DatePick.SelectedDate == null)
+                return;
+
+            var date = DatePick.SelectedDate.Value.Date;
+            if (date != PersistentDate)
+            {
+                TimePick.SelectedTime = new DateTime(date.Year, date.Month, date.Day, 14, 0, 0);
+                PersistentDate = date;
+            }
 
         }
     }

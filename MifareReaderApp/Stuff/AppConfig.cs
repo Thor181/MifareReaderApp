@@ -51,6 +51,49 @@ namespace MifareReaderApp.Stuff
             }
         }
 
+        private string _defaultPlace = "";
+        public string DefaultPlace
+        {
+            get
+            {
+                return _defaultPlace;
+            }
+
+            set
+            {
+                _defaultPlace = value;
+                Save();
+            }
+        }
+
+        private string _ID1Name = "ID1";
+        public string ID1Name
+        {
+            get
+            {
+                return _ID1Name;
+            }
+            set
+            {
+                _ID1Name = value; 
+                Save();
+            }
+        }
+
+        private string _ID2Name = "ID2";
+        public string ID2Name
+        {
+            get
+            {
+                return _ID2Name;
+            }
+            set
+            {
+                _ID2Name = value; 
+                Save();
+            }
+        }
+
         [JsonIgnore]
         public string LogsPath => $"{Constants.Constants.MainFolderPath}\\Logs\\";
 

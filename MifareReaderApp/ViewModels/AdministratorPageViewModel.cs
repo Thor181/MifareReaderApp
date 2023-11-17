@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using MifareReaderApp.DataLogic;
 using MifareReaderApp.DataLogic.Stuff;
 using MifareReaderApp.Models;
@@ -8,21 +7,12 @@ using MifareReaderApp.Models.Interfaces;
 using MifareReaderApp.Models.Stuff;
 using MifareReaderApp.Stuff;
 using MifareReaderApp.Stuff.Commands;
-using MifareReaderApp.Stuff.Results;
 using MifareReaderApp.Views.Dialogs;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -74,6 +64,23 @@ namespace MifareReaderApp.ViewModels
         }
 
         public DateFilter DateFilter { get; set; } = new();
+        public string DefaultPlace { get => AppConfig.Instance.DefaultPlace; set => AppConfig.Instance.DefaultPlace = value; }
+
+        public string ID1Name { get => AppConfig.Instance.ID1Name; set => AppConfig.Instance.ID1Name = value; }
+        public string ID2Name { get => AppConfig.Instance.ID2Name; set => AppConfig.Instance.ID2Name = value; }
+
+        private bool _isSearchVisible = false;
+        public bool IsSearchVisible
+        {
+            get
+            {
+                return _isSearchVisible;
+            }
+            set
+            {
+                _isSearchVisible = value; OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region Commands
@@ -82,6 +89,7 @@ namespace MifareReaderApp.ViewModels
         public SimpleCommand ChangeAdminPasswordCommand { get; set; }
         public SimpleCommand FilterTableValuesCommand { get; set; }
         public SimpleCommand ExportToExcelCommand { get; set; }
+        public SimpleCommand SearchCommand { get; set; }
         #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -148,6 +156,11 @@ namespace MifareReaderApp.ViewModels
             ExportToExcelCommand = new SimpleCommand()
             {
                 CommandHandler = ExportToExcel
+            };
+
+            SearchCommand = new SimpleCommand()
+            {
+                CommandHandler = SearchUser
             };
         }
 
@@ -236,6 +249,7 @@ namespace MifareReaderApp.ViewModels
                 AppliedUsers.Add((AppliedUser)item);
 
             TableDataGrid.ItemsSource = AppliedUsers;
+            IsSearchVisible = true;
         }
 
         private void LoadQREvents(DateTime from, DateTime to)
@@ -258,6 +272,7 @@ namespace MifareReaderApp.ViewModels
                 AppliedQrEvents.Add((AppliedQREvent)item);
 
             TableDataGrid.ItemsSource = AppliedQrEvents;
+            IsSearchVisible = false;
         }
 
         private void LoadCardEvents(DateTime from, DateTime to)
@@ -280,6 +295,7 @@ namespace MifareReaderApp.ViewModels
                 AppliedCardEvents.Add((AppliedCardEvent)item);
 
             TableDataGrid.ItemsSource = AppliedCardEvents;
+            IsSearchVisible = false;
         }
 
         private void FilterTableValues(object? parameter)
@@ -327,7 +343,10 @@ namespace MifareReaderApp.ViewModels
                     PageIsEnabled = true;
                 });
             }
+        }
 
+        private void SearchUser(object? parameter)
+        {
 
         }
     }

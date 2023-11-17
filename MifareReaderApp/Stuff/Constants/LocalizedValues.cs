@@ -13,8 +13,8 @@ namespace MifareReaderApp.Stuff.Constants
         public const string Name2 = "Отчество";
         public const string Surname = "Фамилия";
         public const string Card = "Номер карты";
-        public const string Id1 = "ID1";
-        public const string Id2 = "ID2";
+        public static string Id1 => AppConfig.Instance.ID1Name;
+        public static string Id2 => AppConfig.Instance.ID2Name;    
         public const string BeforeDate = "Дата";
         public const string BeforeTime = "Время";
         public const string Place = "Местонахождение";

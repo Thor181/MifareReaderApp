@@ -86,7 +86,10 @@ namespace MifareReaderApp.ViewModels
             }
 
             if (result.NotFound == true)
-                User = new User() { Card = cardNumber, Before = DateTime.Now };
+            {
+                var placeId = AvailablePlaces.FirstOrDefault(x => x.Name == AppConfig.Instance.DefaultPlace)?.Id ?? -1;
+                User = new User() { Card = cardNumber, Before = DateTime.Now, PlaceId = placeId };
+            }
             else
                 User = result.Entity;
 

@@ -72,7 +72,7 @@ namespace MifareReaderApp.DataLogic
             user.Id = GenerateId();
             user.Dt = DateTime.Now;
 
-            var place = new HelperEntityLogic<Place>().First();
+            var place = new HelperEntityLogic<Place>().Get(AppConfig.Instance.DefaultPlace);
 
             if (place == null)
             {

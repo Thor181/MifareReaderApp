@@ -135,10 +135,11 @@
                         <DatePicker Name="DatePick" Language="Ru"
                                     SelectedDateFormat="Short"
                                     Width="140"
+                                    SelectedDateChanged="DatePick_SelectedDateChanged"
                                     Margin="0 0 5 0"
                                     SelectedDate="{Binding User.Before, UpdateSourceTrigger=PropertyChanged}"
                                     materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.BeforeDate}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"  />
 
                         <materialDesign:TimePicker Name="TimePick"
                                                    SelectedTimeFormat="Short"
