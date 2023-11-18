@@ -32,7 +32,7 @@ namespace MifareReaderApp.Models.AppliedModes
         public string TypeName { get; set; } = null!;
 
         [LocalizedName("Метка времени")]
-        public DateTime Dt { get; set; }
+        public DateTime? Dt { get; set; }
 
         public virtual Point Point { get; set; } = null!;
         public virtual PayType Pay { get; set; } = null!;

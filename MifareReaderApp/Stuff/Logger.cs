@@ -27,20 +27,28 @@ namespace MifareReaderApp.Stuff
             var formattedMessage = $"[{DateTime.Now}] ({_errorLevel}) | {message}";
 
             if (e != null)
-                formattedMessage += $" | {e.Message}";
+                formattedMessage += $" | {e.Message} | {e.InnerException}";
 
             AppendLines(formattedMessage);
         }
 
         private void AppendLines(params string[] formattedMessage)
         {
-            var task = Task.Run(async () =>
+            Task.Run(async () =>
             {
-                var fileName = GetFileName();
-                await File.AppendAllLinesAsync(fileName, formattedMessage);
+                await Retry.Do(() =>
+                 {
+                     var fileName = GetFileName();
+                     File.AppendAllLines(fileName, formattedMessage);
+                     return true;
+                 }, null, TimeSpan.FromSeconds(5), 10, "");
             });
+            //var task = Task.Run(async () =>
+            //{
 
-            task.Wait();
+            //});
+
+            //task.Wait();
         }
 
         private string GetFileName()

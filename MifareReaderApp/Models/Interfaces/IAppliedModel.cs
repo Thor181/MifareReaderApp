@@ -8,6 +8,6 @@ namespace MifareReaderApp.Models.Interfaces
 {
     public interface IAppliedModel
     {
-        public DateTime Dt { get; set; }
+        public DateTime? Dt { get; set; }
     }
 }

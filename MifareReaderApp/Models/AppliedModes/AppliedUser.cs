@@ -15,34 +15,34 @@ namespace MifareReaderApp.Models.AppliedModes
         public Guid Id { get; set; }
 
         [LocalizedName("Имя")]
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; } = null!;
 
         [LocalizedName("Отчество")]
-        public string Name2 { get; set; } = null!;
+        public string? Name2 { get; set; } = null!;
 
         [LocalizedName("Фамилия")]
-        public string Surname { get; set; } = null!;
+        public string? Surname { get; set; } = null!;
 
         [LocalizedName("Номер карты")]
         public string Card { get; set; } = null!;
 
         [LocalizedName("Id1")]
-        public string Id1 { get; set; } = null!;
+        public string? Id1 { get; set; } = null!;
 
         [LocalizedName("Id2")]
-        public string Id2 { get; set; } = null!;
+        public string? Id2 { get; set; } = null!;
 
         [LocalizedName("Срок действия")]
-        public DateTime Before { get; set; }
+        public DateTime? Before { get; set; }
 
         [LocalizedName("Сотрудник")]
-        public bool Staff { get; set; }
+        public bool? Staff { get; set; }
 
         [LocalizedName("Местонахождение")]
         public string PlaceName { get; set; } = null!;
 
         [LocalizedName("Метка времени")]
-        public DateTime Dt { get; set; }
+        public DateTime? Dt { get; set; }
 
         public virtual Place Place { get; set; } = null!;
 

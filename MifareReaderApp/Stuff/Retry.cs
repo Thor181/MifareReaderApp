@@ -20,7 +20,7 @@ namespace MifareReaderApp.Stuff
                     try
                     {
                         result = action.Invoke();
-                        var retry = callback.Invoke(result);
+                        var retry = callback?.Invoke(result);
                         if (retry == true)
                         {
                             await Task.Delay(interval);

@@ -143,7 +143,7 @@ namespace MifareReaderApp.ViewModels
 
             InitializeDatabaseCommand = new SimpleCommand()
             {
-                CommandHandler = InitializeDatabas
+                CommandHandler = InitializeDatabase
             };
 
             ChangeAdminPasswordCommand = new SimpleCommand()
@@ -200,7 +200,7 @@ namespace MifareReaderApp.ViewModels
             AppConfig.Instance.DbConnectionString = ConnectionString;
         }
 
-        private void InitializeDatabas(object? parameter)
+        private void InitializeDatabase(object? parameter)
         {
             using var dbInitialization = new DbInitialization();
             var creationResult = dbInitialization.EnsureCreated();

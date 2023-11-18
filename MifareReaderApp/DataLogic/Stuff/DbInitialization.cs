@@ -1,4 +1,5 @@
-﻿using MifareReaderApp.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MifareReaderApp.Models;
 using MifareReaderApp.Models.Interfaces;
 using MifareReaderApp.Stuff.Results;
 using System;
@@ -29,7 +30,7 @@ namespace MifareReaderApp.DataLogic.Stuff
                 var set = DbContext.Set<T>();
                 var entry = set.SingleOrDefault(x => x.Name == name);
                 if (entry == null)
-                    set.Add(new T() { Name = name});
+                    set.Add(new T() { Name = name });
             }
 
             DbContext.SaveChanges();
@@ -45,7 +46,17 @@ namespace MifareReaderApp.DataLogic.Stuff
                 if (dbCreated == true)
                     Initialize();
                 else
+                {
+                    var rows = DbContext.Database.SqlQueryRaw<int>("alter table Users\r\nalter column [Name] nvarchar(50) null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [Name2] nvarchar(50) null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [Surname] nvarchar(50) null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [Id1] nvarchar(50) null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [Id2] nvarchar(50) null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [Before] datetime null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [PlaceId] int null;" +
+                        "\r\n\r\nalter table Users\r\nalter column [Staff] bit null;\r\n").ToList();
                     result.Message = "База данных уже существует";
+                }
             }
             catch (Exception e)
             {
