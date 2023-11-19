@@ -90,7 +90,7 @@ namespace MifareReaderApp.ViewModels
                 var placeId = AvailablePlaces.FirstOrDefault(x => x.Name == AppConfig.Instance.DefaultPlace)?.Id ?? -1;
 
                 var date = DateTime.Now;
-                var newDate = new DateTime(date.Year, date.Minute, date.Hour, 14, 0, 0);
+                var newDate = new DateTime(date.Year, date.Month, date.Day, 14, 0, 0);
 
                 User = new User() { Card = cardNumber, Before = newDate, PlaceId = placeId };
             }
