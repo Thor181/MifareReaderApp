@@ -92,7 +92,7 @@ namespace MifareReaderApp.ViewModels
                 var date = DateTime.Now;
                 var newDate = new DateTime(date.Year, date.Month, date.Day, 14, 0, 0);
 
-                User = new User() { Card = cardNumber, Before = newDate, PlaceId = placeId };
+                User = new User() { Card = cardNumber, Before = newDate, PlaceId = placeId, Staff = false };
             }
             else
                 User = result.Entity;
