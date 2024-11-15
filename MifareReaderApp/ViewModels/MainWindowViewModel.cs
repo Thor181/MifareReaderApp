@@ -51,10 +51,7 @@ namespace MifareReaderApp.ViewModels
                 var result = CheckAdminPassword(value);
 
                 if (result == false)
-                {
-                    
                     return;
-                }
 
                 AppConfig.Instance.AdminMode = value; 
                 OnPropertyChanged();

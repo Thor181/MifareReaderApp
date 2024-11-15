@@ -42,15 +42,26 @@ namespace MifareReaderApp.ViewModels
             set { _user = value; OnPropertyChanged(); }
         }
 
+        private User _userPersistence;
+        public User UserPersistence
+        {
+            get { return _userPersistence; }
+            set { _userPersistence = value; IsRestoreCommandEnabled = value != null; OnPropertyChanged(); }
+        }
+
         private bool _adminMode;
         public bool AdminMode { get => _adminMode; set { _adminMode = value; OnPropertyChanged(); } }
 
         public List<Place> AvailablePlaces { get => GetAvailablePlaces(); }
+
+        private bool _isRestoreCommandEnabled = false;
+        public bool IsRestoreCommandEnabled { get => _isRestoreCommandEnabled; set { _isRestoreCommandEnabled = value; OnPropertyChanged(); } }
         #endregion
 
         #region Commands
         public SimpleCommand SaveCommand { get; set; }
         public SimpleCommand RemoveCommand { get; set; }
+        public SimpleCommand RestoreCommand { get; set; }
         #endregion
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -67,6 +78,12 @@ namespace MifareReaderApp.ViewModels
             {
                 CommandHandler = RemoveUser
             };
+
+            RestoreCommand = new SimpleCommand()
+            {
+                CommandHandler = RestoreUser
+            };
+
         }
 
         private void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -96,6 +113,8 @@ namespace MifareReaderApp.ViewModels
             }
             else
                 User = result.Entity;
+
+            
 
             FieldsIsEnabled = true;
             ButtonsIsEnabled = true;
@@ -138,6 +157,9 @@ namespace MifareReaderApp.ViewModels
                     return;
                 }
 
+                if (user != null)
+                    UserPersistence = user.Clone();
+
                 MessageDialog.ShowDialog(result.Message);
 
                 if (result.IsSuccess)
@@ -156,6 +178,16 @@ namespace MifareReaderApp.ViewModels
 
                 if (result.IsSuccess)
                     ResetState();
+            }
+        }
+
+        public void RestoreUser(object? entity)
+        {
+            if (UserPersistence != null && User != null)
+            {
+                var cardCache = User.Card;
+                User = UserPersistence.Clone();
+                User.Card = cardCache;
             }
         }
 

@@ -132,14 +132,15 @@
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 7 0 0">
 
-                        <DatePicker Name="DatePick" Language="Ru"
+                        <DatePicker Name="DatePick"
+                                    Language="Ru"
                                     SelectedDateFormat="Short"
                                     Width="140"
                                     SelectedDateChanged="DatePick_SelectedDateChanged"
                                     Margin="0 0 5 0"
                                     SelectedDate="{Binding User.Before, UpdateSourceTrigger=PropertyChanged}"
                                     materialDesign:HintAssist.Hint="{x:Static constants:LocalizedValues.BeforeDate}"
-                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"  />
+                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
 
                         <materialDesign:TimePicker Name="TimePick"
                                                    SelectedTimeFormat="Short"
@@ -158,17 +159,26 @@
             </Grid>
 
             <Grid Margin="0 35"
-                  IsEnabled="{Binding ButtonsIsEnabled}">
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <Button Width="110"
-                            Margin="5 0"
-                            Command="{Binding SaveCommand}"
-                            CommandParameter="{Binding User}">Сохранить</Button>
-                    <Button Width="110"
-                            Margin="5 0"
-                            Command="{Binding RemoveCommand}"
-                            CommandParameter="{Binding User}">Удалить</Button>
+                  >
+                <StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                IsEnabled="{Binding ButtonsIsEnabled}">
+                        <Button Width="110"
+                                Margin="5 0"
+                                Command="{Binding SaveCommand}"
+                                CommandParameter="{Binding User}">Сохранить</Button>
+                        <Button Width="110"
+                                Margin="5 0"
+                                Command="{Binding RemoveCommand}"
+                                CommandParameter="{Binding User}">Удалить</Button>
+
+                    </StackPanel>
+                    <Button Width="230"
+                            Margin="5 10"
+                            Command="{Binding RestoreCommand}"
+                            CommandParameter="{Binding User}" IsEnabled="{Binding IsRestoreCommandEnabled}">Ранее сохраненные данные</Button>
                 </StackPanel>
             </Grid>
 
