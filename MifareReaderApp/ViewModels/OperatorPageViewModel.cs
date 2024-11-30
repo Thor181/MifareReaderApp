@@ -186,8 +186,10 @@ namespace MifareReaderApp.ViewModels
             if (UserPersistence != null && User != null)
             {
                 var cardCache = User.Card;
+                var idCache = User.Id;
                 User = UserPersistence.Clone();
                 User.Card = cardCache;
+                User.Id = idCache;
             }
         }
 
