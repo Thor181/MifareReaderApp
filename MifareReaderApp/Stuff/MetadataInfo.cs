@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Identity.Client;
 using MifareReaderApp.Stuff.Constants;
+using NPOI.POIFS.FileSystem;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -77,14 +79,15 @@ namespace MifareReaderApp.Stuff
 
         public static List<string> GetPropertiesValues(T instance)
         {
-            var props = GetProperties(instance).Where(x => !PropertyIsVirtual(instance.GetType(), x.Name) || x.PropertyType == typeof(DateTime)).ToList();
+            var type = instance.GetType();
+            var props = GetProperties(instance).Where(x => !PropertyIsVirtual(type, x.Name) || PropertyIsDateTime(x.PropertyType)).ToList();
             if (props == null)
                 return null;
 
             var values = new List<string>();
 
             for (int i = 0; i < props.Count; i++)
-                values.Add(props[i].GetValue(instance).ToString());
+                values.Add(props[i].GetValue(instance)?.ToString() ?? string.Empty);
 
             return values;
         }
@@ -94,7 +97,26 @@ namespace MifareReaderApp.Stuff
             var isVirtual = type.GetProperty(propertyName).GetGetMethod().IsVirtual;
 
             return isVirtual;
-
         }
+
+        public static bool PropertyIsDateTime(Type type)
+        {
+            var propertyType = type.IsGenericType ? type.GenericTypeArguments.First() : type;
+            var isDateTime = propertyType == typeof(DateTime);
+
+            return isDateTime;
+        }
+
+        public static bool IsVisibleByOverride(Type type, string propertyName)
+        {
+            var attribute = type.GetProperty(propertyName)?.GetCustomAttribute<OverrideVisibleAttribute>();
+
+            if (attribute == null)
+                return false;
+
+            return attribute.Visible;
+        }
+
+        
     }
 }
