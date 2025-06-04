@@ -22,6 +22,7 @@ namespace MifareReaderApp.Models.AppliedModes
         [LocalizedName("Тип")]
         public string TypeName { get; set; } = null!;
 
+        [OverrideVisible(true)]
         [LocalizedName("Метка времени")]
         public DateTime? Dt { get; set; }
 
