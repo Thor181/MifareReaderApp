@@ -13,10 +13,12 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace MifareReaderApp.ViewModels
 {
@@ -117,7 +119,7 @@ namespace MifareReaderApp.ViewModels
 
         public ObservableCollection<AppliedUser> AppliedUsers { get; set; }
         public ObservableCollection<AppliedQREvent> AppliedQrEvents { get; set; }
-        public ObservableCollection<AppliedCardEvent> AppliedCardEvents { get; set; }
+        public ObservableCollection<AppliedCardEventUser> AppliedCardEvents { get; set; }
 
         public AdministratorPageViewModel()
         {
@@ -165,7 +167,7 @@ namespace MifareReaderApp.ViewModels
             {
                 CommandHandler = SearchUser
             };
-            
+
             EditCommand = new SimpleCommand()
             {
                 CommandHandler = EditUser
@@ -225,13 +227,20 @@ namespace MifareReaderApp.ViewModels
             Type collectionType = dataGrid.ItemsSource.GetType();
             var itemType = collectionType.GetGenericArguments().Single();
 
-            if (e.PropertyType == typeof(System.DateTime))
+            var propertyType = e.PropertyType.IsGenericType ? e.PropertyType.GenericTypeArguments.First() : e.PropertyType;
+            var propertyIsDateTime = MetadataInfo<IAppliedModel>.PropertyIsDateTime(e.PropertyType);
+
+            if (propertyIsDateTime)
                 (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy HH:mm";
 
             var name = MetadataInfo<IAppliedModel>.GetPropertyLocalizedName(itemType, e.PropertyName);
-
-            if (MetadataInfo<IAppliedModel>.PropertyIsVirtual(itemType, e.PropertyName) && e.PropertyType != typeof(DateTime))
+            
+            if (!MetadataInfo<IAppliedModel>.IsVisibleByOverride(itemType, e.PropertyName)
+                            && MetadataInfo<IAppliedModel>.PropertyIsVirtual(itemType, e.PropertyName)
+                            && !propertyIsDateTime)
+            {
                 e.Cancel = true;
+            }
 
             e.Column.Header = name;
         }
@@ -260,7 +269,7 @@ namespace MifareReaderApp.ViewModels
             {
                 dbResult = logic.GetAllIncluded(x => x.Dt >= from && x.Dt <= to);
             }
-            
+
             if (!dbResult.IsSuccess)
             {
                 MessageDialog.ShowDialog(dbResult.Message);
@@ -307,7 +316,7 @@ namespace MifareReaderApp.ViewModels
         {
             using var logic = new CardEventLogic();
 
-            var dbResult = logic.GetAllIncluded(x => x.Dt >= from && x.Dt <= to);
+            var dbResult = logic.GetAllWithUserIncluded(x => x.Dt >= from && x.Dt <= to);
             if (!dbResult.IsSuccess)
             {
                 MessageDialog.ShowDialog(dbResult.Message);
@@ -320,7 +329,7 @@ namespace MifareReaderApp.ViewModels
             AppliedCardEvents.Clear();
 
             foreach (var item in dbValues)
-                AppliedCardEvents.Add((AppliedCardEvent)item);
+                AppliedCardEvents.Add(AppliedCardEventUser.CreateWithUser(item.Key, item.Value));
 
             TableDataGrid.ItemsSource = AppliedCardEvents;
             IsSearchVisible = false;
@@ -346,25 +355,23 @@ namespace MifareReaderApp.ViewModels
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var d = TableDataGrid.ItemsSource.Cast<AppliedUser>();
-
                 var headers = TableDataGrid.Columns.Select(x => x.Header.ToString()).ToList();
 
-                var v = new List<List<string>>();
+                var rows = new List<List<string>>();
 
                 foreach (var item in gridItems)
                 {
                     var propertiesValues = MetadataInfo<IAppliedModel>.GetPropertiesValues((IAppliedModel)item);
-                    v.Add(propertiesValues);
+                    rows.Add(propertiesValues);
                 }
 
                 PageIsEnabled = false;
                 Task.Run(async () =>
                 {
-                    var a = new Excel(headers, v, SelectedTable, saveFileDialog.FileName);
+                    var report = new Excel(headers, rows, SelectedTable, saveFileDialog.FileName);
                     ProgressVisibility = Visibility.Visible;
 
-                    var result = await a.Export();
+                    var result = await report.Export();
 
                     MessageDialog.ShowDialog(result.Message);
                     ProgressVisibility = Visibility.Collapsed;
@@ -386,7 +393,7 @@ namespace MifareReaderApp.ViewModels
             if (!string.IsNullOrEmpty(card))
             {
                 MainWindowViewModel.OnPortDataReceivedInternal?.Invoke($"[{card}]");
-                
+
                 MessageDialog.ShowDialog($"Запись с номером карты \"{card}\" выбрана для редактирования.\n\nПерейдите на вкладку \"Оператор\" для продолжения.");
             }
             else

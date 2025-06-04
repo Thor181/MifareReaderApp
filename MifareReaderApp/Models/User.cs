@@ -13,7 +13,9 @@ namespace MifareReaderApp.Models;
 public partial class User : IEditableModel, INotifyPropertyChanged
 {
     private Guid id;
+    //Имя
     private string? name = null!;
+    //Отчество
     private string? name2 = null!;
     private string? surname = null!;
     private string card = null!;
@@ -29,7 +31,15 @@ public partial class User : IEditableModel, INotifyPropertyChanged
     private string placeAsString = null!;
 
     public Guid Id { get => id; set { id = value; OnPropertyChanged(); } }
+
+    /// <summary>
+    /// Имя
+    /// </summary>
     public string? Name { get => name; set { name = value; OnPropertyChanged(); } }
+
+    /// <summary>
+    /// Отчество
+    /// </summary>
     public string? Name2 { get => name2; set { name2 = value; OnPropertyChanged(); } }
     public string? Surname { get => surname; set { surname = value; OnPropertyChanged(); } }
     public string Card { get => card; set { card = value; OnPropertyChanged(); } }
@@ -43,10 +53,15 @@ public partial class User : IEditableModel, INotifyPropertyChanged
 
     [NotMapped]
     public string BeforeDate { get => beforeDate; set { beforeDate = value; OnPropertyChanged(); } }
+
     [NotMapped]
     public string BeforeTime { get => beforeTime; set { beforeTime = value; OnPropertyChanged(); } }
+
     [NotMapped]
     public string PlaceAsString { get => placeAsString; set { placeAsString = value; OnPropertyChanged(); } }
+
+    [NotMapped]
+    public string FullName => string.Join(" ", Surname, name, name2);
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
