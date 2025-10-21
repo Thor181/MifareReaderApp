@@ -59,7 +59,6 @@ namespace MifareReaderApp.DataLogic
                     .Include(x => x.Point)
                     .Include(x => x.Type)
                     .Select(x => KeyValuePair.Create(x, users.SingleOrDefault(y => y.Card == x.Card)))
-                    //.Join(DbContext.Users, x => x.Card, y => y.Card, (cardEvent, user) => KeyValuePair.Create(cardEvent, user))
                     .ToList();
 
                 result.Entity = set;
