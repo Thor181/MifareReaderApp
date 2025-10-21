@@ -7,15 +7,6 @@ namespace MifareReaderApp.Models;
 
 public partial class MfRADbContext : DbContext
 {
-    public MfRADbContext()
-    {
-    }
-
-    public MfRADbContext(DbContextOptions<MfRADbContext> options)
-        : base(options)
-    {
-    }
-
     public virtual DbSet<CardEvent> CardEvents { get; set; }
 
     public virtual DbSet<EventsType> EventsTypes { get; set; }
@@ -29,6 +20,18 @@ public partial class MfRADbContext : DbContext
     public virtual DbSet<Qrevent> Qrevents { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<OperatorEvent> OperatorEvents { get; set; }
+
+    public MfRADbContext()
+    {
+    }
+
+    public MfRADbContext(DbContextOptions<MfRADbContext> options)
+        : base(options)
+    {
+    }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(AppConfig.Instance.ConnectionString);
@@ -117,6 +120,22 @@ public partial class MfRADbContext : DbContext
                 .HasForeignKey(d => d.PlaceId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Users_Places");
+        });
+
+        modelBuilder.Entity<OperatorEvent>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Dt).HasColumnType("datetime");
+            entity.HasOne(d => d.EventType)
+                .WithMany(x => x.OperatorEvents)
+                .HasForeignKey(d => d.TypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OperatorEvents_EventTypes");
+            entity.HasOne(d => d.Point)
+                .WithMany(d => d.OperatorEvents)
+                .HasForeignKey(d => d.PointId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OperatorEvents_Points");
         });
 
         OnModelCreatingPartial(modelBuilder);
