@@ -18,6 +18,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace MifareReaderApp.ViewModels
@@ -31,6 +32,27 @@ namespace MifareReaderApp.ViewModels
             get { return _pageIsEnabled; }
             set { _pageIsEnabled = value; OnPropertyChanged(); }
         }
+
+        private bool _groupingEnabled = false;
+        public bool GroupingEnabled
+        {
+            get { return _groupingEnabled; }
+            set
+            {
+                _groupingEnabled = value;
+                AvailableTables[SelectedTable]?.Invoke(DateFilter.DateFrom, DateFilter.DateTo, null);
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _groupingVisible = false;
+        public bool GroupingVisible
+        {
+            get { return _groupingVisible; }
+            set { _groupingVisible = value; OnPropertyChanged(); }
+        }
+
+        private string[] _groupingAvailableTables = Array.Empty<string>();
 
         public DataGrid TableDataGrid { get; set; }
 
@@ -113,6 +135,8 @@ namespace MifareReaderApp.ViewModels
             {
                 _selectedTable = value;
 
+                GroupingVisible = _groupingAvailableTables.Contains(value);
+
                 AvailableTables[value].Invoke(DateFilter.DateFrom, DateFilter.DateTo, null);
             }
         }
@@ -120,6 +144,7 @@ namespace MifareReaderApp.ViewModels
         public ObservableCollection<AppliedUser> AppliedUsers { get; set; }
         public ObservableCollection<AppliedQREvent> AppliedQrEvents { get; set; }
         public ObservableCollection<AppliedCardEventUser> AppliedCardEvents { get; set; }
+        public ObservableCollection<AppliedOperatorEvent> AppliedOperatorEvents { get; set; }
 
         public AdministratorPageViewModel()
         {
@@ -132,6 +157,7 @@ namespace MifareReaderApp.ViewModels
             AppliedUsers = new();
             AppliedQrEvents = new();
             AppliedCardEvents = new();
+            AppliedOperatorEvents = new();
 
             ConnectionString.OnConfigChange += AppConfig.Instance.Save;
         }
@@ -188,8 +214,11 @@ namespace MifareReaderApp.ViewModels
             {
                 {"Пользователи (Users)", LoadUsers },
                 {"QREvents", LoadQREvents },
-                {"CardEvents", LoadCardEvents }
+                {"CardEvents", LoadCardEvents },
+                {"OperatorEvents", LoadOperatorEvents }
             };
+
+            _groupingAvailableTables = new string[] { "QREvents" };
         }
 
         private void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -224,17 +253,35 @@ namespace MifareReaderApp.ViewModels
         public void OnTablesDataGridColumnGenerating(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             var dataGrid = (DataGrid)sender;
+
             Type collectionType = dataGrid.ItemsSource.GetType();
-            var itemType = collectionType.GetGenericArguments().Single();
+
+            var itemType = collectionType.GetGenericArguments().SingleOrDefault();
+
+            if (itemType == null && dataGrid.ItemsSource is ListCollectionView view)
+            {
+                var prop = view.ItemProperties.FirstOrDefault();
+
+                if (prop == null)
+                    return;
+
+                var componentTypeProperty = prop.Descriptor.GetType().GetProperty("ComponentType");
+                var componentType = componentTypeProperty?.GetValue(prop.Descriptor) as Type;
+
+                if (componentType != null)
+                    itemType = componentType;
+            }
 
             var propertyType = e.PropertyType.IsGenericType ? e.PropertyType.GenericTypeArguments.First() : e.PropertyType;
             var propertyIsDateTime = MetadataInfo<IAppliedModel>.PropertyIsDateTime(e.PropertyType);
 
             if (propertyIsDateTime)
+            {
                 (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy HH:mm";
+            }
 
             var name = MetadataInfo<IAppliedModel>.GetPropertyLocalizedName(itemType, e.PropertyName);
-            
+
             if (!MetadataInfo<IAppliedModel>.IsVisibleByOverride(itemType, e.PropertyName)
                             && MetadataInfo<IAppliedModel>.PropertyIsVirtual(itemType, e.PropertyName)
                             && !propertyIsDateTime)
@@ -243,6 +290,7 @@ namespace MifareReaderApp.ViewModels
             }
 
             e.Column.Header = name;
+            e.Column.CanUserSort = true;
         }
 
         private void LoadUsers(DateTime from, DateTime to, string searchString)
@@ -308,7 +356,19 @@ namespace MifareReaderApp.ViewModels
             foreach (var item in dbValues)
                 AppliedQrEvents.Add((AppliedQREvent)item);
 
-            TableDataGrid.ItemsSource = AppliedQrEvents;
+            if (GroupingEnabled)
+            {
+                var cvs = new CollectionViewSource();
+                cvs.Source = AppliedQrEvents;
+                cvs.GroupDescriptions.Add(new PropertyGroupDescription(nameof(AppliedQREvent.Fp)));
+
+                TableDataGrid.ItemsSource = cvs.View;
+            }
+            else
+            {
+                TableDataGrid.ItemsSource = AppliedQrEvents;
+            }
+
             IsSearchVisible = false;
         }
 
@@ -333,6 +393,28 @@ namespace MifareReaderApp.ViewModels
 
             TableDataGrid.ItemsSource = AppliedCardEvents;
             IsSearchVisible = false;
+        }
+
+        private void LoadOperatorEvents(DateTime from, DateTime to, string searchString)
+        {
+            using var logic = new OperatorEventLogic();
+
+            var dbResult = logic.GetAllIncluded(x => x.Dt >= from && x.Dt <= to);
+            if (!dbResult.IsSuccess)
+            {
+                MessageDialog.ShowDialog(dbResult.Message);
+                return;
+            }
+
+            var dbValues = dbResult.Entity;
+            var values = new List<AppliedOperatorEvent>();
+
+            AppliedOperatorEvents.Clear();
+
+            foreach (var item in dbValues)
+                AppliedOperatorEvents.Add((AppliedOperatorEvent)item);
+
+            TableDataGrid.ItemsSource = AppliedOperatorEvents;
         }
 
         private void FilterTableValues(object? parameter)

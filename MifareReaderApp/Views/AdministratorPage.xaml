@@ -225,7 +225,7 @@
                       IsEnabled="{Binding PageIsEnabled}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="60" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -239,51 +239,59 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Orientation="Horizontal"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Top">
-                            <ComboBox ItemsSource="{Binding AvailableTables}"
-                                      DisplayMemberPath="Key"
-                                      SelectedValuePath="Key"
-                                      Width="150"
-                                      Margin="0 0 5 0"
-                                      SelectedValue="{Binding SelectedTable}"></ComboBox>
-                            <TextBlock VerticalAlignment="Center"
-                                       Text="От:  "></TextBlock>
-                            <DatePicker Name="DatePickerFrom"
-                                        SelectedDate="{Binding DateFilter.DateFrom}"
-                                        SelectedDateFormat="Short"
-                                        Width="100"
-                                        VerticalAlignment="Center"
-                                        Margin="0 0 5 0"></DatePicker>
-                            <TextBlock VerticalAlignment="Center"
-                                       Text="До:  "></TextBlock>
-                            <DatePicker Name="DatePickerTo"
-                                        SelectedDate="{Binding DateFilter.DateTo}"
-                                        SelectedDateFormat="Short"
-                                        Width="100"
-                                        VerticalAlignment="Center"
-                                        Margin="0 0 5 0"></DatePicker>
-                            <Button  Command="{Binding FilterTableValuesCommand}">Фильтр</Button>
-                            <Button Margin="5 0 0 0"
-                                    Padding="5 0"
-                                    Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Command="{Binding SearchCommand}">
-                                <materialDesign:PackIcon HorizontalAlignment="Center"
-                                                         Width="25"
-                                                         Height="25"
-                                                         Kind="CreditCardSearch" />
-                            </Button>
-                            <Button Margin="5 0 0 0"
-                                    Padding="5 0"
-                                    Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Command="{Binding EditCommand}"
-                                    CommandParameter="{Binding ElementName=TablesDataGrid, Path=SelectedItem}">
-                                <materialDesign:PackIcon HorizontalAlignment="Center"
-                                                         Width="25"
-                                                         Height="25"
-                                                         Kind="CreditCardEdit" />
-                            </Button>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Top">
+                                <ComboBox ItemsSource="{Binding AvailableTables}"
+                                          DisplayMemberPath="Key"
+                                          SelectedValuePath="Key"
+                                          Width="150"
+                                          Margin="0 0 5 0"
+                                          SelectedValue="{Binding SelectedTable}"></ComboBox>
+                                <TextBlock VerticalAlignment="Center"
+                                           Text="От:  "></TextBlock>
+                                <DatePicker Name="DatePickerFrom"
+                                            SelectedDate="{Binding DateFilter.DateFrom}"
+                                            SelectedDateFormat="Short"
+                                            Width="100"
+                                            VerticalAlignment="Center"
+                                            Margin="0 0 5 0"></DatePicker>
+                                <TextBlock VerticalAlignment="Center"
+                                           Text="До:  "></TextBlock>
+                                <DatePicker Name="DatePickerTo"
+                                            SelectedDate="{Binding DateFilter.DateTo}"
+                                            SelectedDateFormat="Short"
+                                            Width="100"
+                                            VerticalAlignment="Center"
+                                            Margin="0 0 5 0"></DatePicker>
+                                <Button  Command="{Binding FilterTableValuesCommand}">Фильтр</Button>
+                                <Button Margin="5 0 0 0"
+                                        Padding="5 0"
+                                        Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding SearchCommand}">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center"
+                                                             Width="25"
+                                                             Height="25"
+                                                             Kind="CreditCardSearch" />
+                                </Button>
+                                <Button Margin="5 0 0 0"
+                                        Padding="5 0"
+                                        Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding EditCommand}"
+                                        CommandParameter="{Binding ElementName=TablesDataGrid, Path=SelectedItem}">
+                                    <materialDesign:PackIcon HorizontalAlignment="Center"
+                                                             Width="25"
+                                                             Height="25"
+                                                             Kind="CreditCardEdit" />
+                                </Button>
+
+                            </StackPanel>
+                            <CheckBox Margin="5 0 0 0"
+                                      Padding="5 0"
+                                      Visibility="{Binding GroupingVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      IsChecked="{Binding GroupingEnabled}"
+                                      Content="Группировать по FP" />
                         </StackPanel>
 
                         <Button Padding="4"
@@ -310,6 +318,16 @@
                                       AutoGeneratingColumn="TablesDataGrid_AutoGeneratingColumn"
                                       CanUserAddRows="False"
                                       CanUserDeleteRows="False">
+                                <DataGrid.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontWeight="Bold"
+                                                           Text="{Binding Name}" />
+                                            </DataTemplate>
+                                        </GroupStyle.HeaderTemplate>
+                                    </GroupStyle>
+                                </DataGrid.GroupStyle>
                             </DataGrid>
                         </ScrollViewer>
                     </Grid>
