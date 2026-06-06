@@ -1,7 +1,6 @@
 ﻿using MifareReaderApp.Stuff.Results;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -4,41 +4,62 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MifareReaderApp"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:views="clr-namespace:MifareReaderApp.Views"
         xmlns:statusControls="clr-namespace:MifareReaderApp.Views.Controls.Status"
         xmlns:converters="clr-namespace:MifareReaderApp.Stuff.Converters"
-        mc:Ignorable="d" 
-        Title="MfRA" Height="450" Width="800" Name="MainWindowView" DataContext="{Binding ElementName=MainWindowView, Path=ViewModel}" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d"
+        Title="MfRA"
+        Height="470"
+        Width="800"
+        Name="MainWindowView"
+        DataContext="{Binding ElementName=MainWindowView, Path=ViewModel}"
+        WindowStartupLocation="CenterScreen">
 
-    
     <Window.Resources>
         <converters:InvertedBoolean x:Key="InvertedBoolean"></converters:InvertedBoolean>
     </Window.Resources>
-    
+
     <Grid Background="{StaticResource ResourceKey=MainBackgroundColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="9*" />
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="MainTabControl" Grid.RowSpan="2"  HorizontalContentAlignment="Left" 
-                    materialDesign:ColorZoneAssist.Mode="PrimaryLight" IsTabStop="False"
+        <TabControl x:Name="MainTabControl"
+                    Grid.RowSpan="2"
+                    HorizontalContentAlignment="Left"
+                    materialDesign:ColorZoneAssist.Mode="PrimaryLight"
+                    IsTabStop="False"
                     SelectedItem="{Binding ElementName=MainWindowView, Path=ViewModel.SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            
-            <TabItem x:Name="OperatorTab" Header="Оператор">
-                <views:OperatorPage ></views:OperatorPage>
+
+            <TabItem x:Name="OperatorTab"
+                     Header="Оператор">
+                <views:OperatorPage></views:OperatorPage>
             </TabItem>
-            <TabItem x:Name="AdministratorTab" Header="Администратор" IsEnabled="{Binding AdminMode}" >
+            <TabItem x:Name="AdministratorTab"
+                     Header="Администратор"
+                     IsEnabled="{Binding AdminMode}">
                 <views:AdministratorPage></views:AdministratorPage>
             </TabItem>
-            
-        </TabControl>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
 
-            <CheckBox Content="Администратор" IsChecked="{Binding AdminMode}" Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}"  />
-            <statusControls:StatusControl x:Name="DatabaseStatusControl" Margin="0 0 5 0" ImageMargin="5" ImageSource="/Resources/db.png"></statusControls:StatusControl>
-            <statusControls:StatusControl x:Name="PortStatusControl" Margin="0 0 5 0" DataContext="ViewModel" ImageSource="/Resources/port.png" ></statusControls:StatusControl>
+        </TabControl>
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+
+            <CheckBox Content="Администратор"
+                      IsChecked="{Binding AdminMode}"
+                      Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" />
+            <statusControls:StatusControl x:Name="DatabaseStatusControl"
+                                          Margin="0 0 5 0"
+                                          ImageMargin="5"
+                                          ImageSource="/Resources/db.png"></statusControls:StatusControl>
+            <statusControls:StatusControl x:Name="PortStatusControl"
+                                          Margin="0 0 5 0"
+                                          DataContext="ViewModel"
+                                          ImageSource="/Resources/port.png"></statusControls:StatusControl>
         </StackPanel>
     </Grid>
 </Window>

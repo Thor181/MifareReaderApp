@@ -13,7 +13,9 @@
              d:DesignWidth="800"
              Name="PageView"
              DataContext="{Binding ElementName=PageView, Path=ViewModel}">
+    
     <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvertedBoolean x:Key="InvertedBooleanConverter"></converters:InvertedBoolean>
     </UserControl.Resources>
 
