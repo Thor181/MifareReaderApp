@@ -63,6 +63,9 @@ public partial class User : IEditableModel, INotifyPropertyChanged
     [NotMapped]
     public string FullName => string.Join(" ", Surname, name, name2);
 
+    [NotMapped]
+    public string FullNameWithCrad => $"{FullName} ({Card})";
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public User Clone()
