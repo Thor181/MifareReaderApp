@@ -14,8 +14,11 @@
             <SolidColorBrush x:Key="MainBackgroundColor" Color="#FFF3F3F3"></SolidColorBrush>
             <SolidColorBrush x:Key="GreenStatus">#4caf50</SolidColorBrush>
             <SolidColorBrush x:Key="RedStatus">#ff6551</SolidColorBrush>
-            
-            <converters:DateTimeConverter x:Key="DateTimeConverter"></converters:DateTimeConverter>
+
+            <converters:DateTimeConverter x:Key="DateTimeConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InvertedBoolean x:Key="InvertedBooleanConverter" />
+            <converters:ObjectToBooleanConverter x:Key="ObjectToBooleanConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

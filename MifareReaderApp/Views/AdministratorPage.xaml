@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:MifareReaderApp.Stuff.Converters"
              xmlns:stuffModels="clr-namespace:MifareReaderApp.Models.Stuff"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:reports="clr-namespace:MifareReaderApp.Views.Controls.Reports"
              xmlns:constants="clr-namespace:MifareReaderApp.Stuff.Constants"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -15,8 +16,7 @@
              DataContext="{Binding ElementName=PageView, Path=ViewModel}">
     
     <UserControl.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:InvertedBoolean x:Key="InvertedBooleanConverter"></converters:InvertedBoolean>
+        
     </UserControl.Resources>
 
     <Grid Background="Green">
@@ -340,6 +340,22 @@
 
 
                 </Grid>
+            </TabItem>
+
+            <TabItem >
+                <TabItem.Header>
+                    <StackPanel Width="auto"
+                                Height="auto"
+                                materialDesign:HintAssist.Hint="Отчеты">
+                        <materialDesign:PackIcon Width="40"
+                                                 Height="40"
+                                                 HorizontalAlignment="Center"
+                                                 Kind="ReportBox" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <reports:ReportsControl />
+
             </TabItem>
 
         </TabControl>

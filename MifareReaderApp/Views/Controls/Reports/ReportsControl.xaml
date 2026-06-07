@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="MifareReaderApp.Views.Controls.Reports.ReportsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MifareReaderApp.Views.Controls.Reports"
+             xmlns:vm="clr-namespace:MifareReaderApp.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+
+    <UserControl.DataContext>
+        <vm:ReportsViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="16"
+          IsEnabled="{Binding PageIsEnabled}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="0,0,0,8"
+                   Grid.Row="0"
+                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                   Text="Отчеты" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="0"
+                            VerticalAlignment="Top">
+                    <ComboBox x:Name="SelectedReportComboBox" ItemsSource="{Binding AvailableReports}"
+                              DisplayMemberPath="Key"
+                              SelectedValuePath="Key"
+                              Width="150"
+                              Margin="0 0 5 0"
+                              SelectedValue="{Binding SelectedReport}"></ComboBox>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="От:  " />
+                    <DatePicker Name="DatePickerFrom"
+                                SelectedDate="{Binding DateFilter.DateFrom}"
+                                SelectedDateFormat="Short"
+                                Width="100"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="До:  " />
+                    <DatePicker Name="DatePickerTo"
+                                SelectedDate="{Binding DateFilter.DateTo}"
+                                SelectedDateFormat="Short"
+                                Width="100"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0" />
+                    <Button  Content="Сформировать"
+                             Command="{Binding GenerateReportCommand}"
+                             IsEnabled="{Binding ElementName=SelectedReportComboBox, Path=SelectedItem, Converter={StaticResource ObjectToBooleanConverter}}" />
+                    <!--<Button Margin="5 0 0 0"
+                            Padding="5 0"
+                            Visibility="{Binding IsSearchVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Command="{Binding SearchCommand}">
+                        <materialDesign:PackIcon HorizontalAlignment="Center"
+                                                 Width="25"
+                                                 Height="25"
+                                                 Kind="CreditCardSearch" />
+                    </Button>-->
+
+                </StackPanel>
+                <!--<CheckBox Margin="5 0 0 0"
+                          Padding="5 0"
+                          Visibility="{Binding GroupingVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          IsChecked="{Binding GroupingEnabled}"
+                          Content="Группировать по FP" />-->
+            </StackPanel>
+
+            <Button Padding="4"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Grid.Column="1"
+                    Command="{Binding ExportToExcelCommand}">
+
+                <materialDesign:PackIcon Width="25"
+                                         Height="25"
+                                         Kind="FileExcel" />
+            </Button>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <ScrollViewer ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                <DataGrid x:Name="ReportValuesDataGrid"
+                          AutoGenerateColumns="True"
+                          ItemsSource="{Binding SelectedReportValues}"
+                          IsReadOnly="True"
+                          AutoGeneratingColumn="TablesDataGrid_AutoGeneratingColumn"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False">
+                    <DataGrid.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontWeight="Bold"
+                                               Text="{Binding Name}" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+                </DataGrid>
+            </ScrollViewer>
+        </Grid>
+
+        <ProgressBar IsIndeterminate="True"
+                     VerticalAlignment="top"
+                     Visibility="{Binding ProgressVisibility, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</UserControl>
