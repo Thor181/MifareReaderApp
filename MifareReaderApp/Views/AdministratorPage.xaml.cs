@@ -1,4 +1,5 @@
 ﻿using MifareReaderApp.Stuff;
+using MifareReaderApp.Stuff.Extenstions;
 using MifareReaderApp.ViewModels;
 using MifareReaderApp.Views.Dialogs;
 using MifareReaderApp.Views.Interfaces;
@@ -28,7 +29,8 @@ namespace MifareReaderApp.Views
 
         private void TablesDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            ViewModel.OnTablesDataGridColumnGenerating(sender, e);
+            if (sender is DataGrid dataGrid)
+                dataGrid.OnDataGridColumnGenerating(e);
         }
     }
 }

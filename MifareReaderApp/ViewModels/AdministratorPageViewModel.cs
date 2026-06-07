@@ -250,49 +250,6 @@ namespace MifareReaderApp.ViewModels
                 MessageDialog.ShowDialog($"Не удалось установить новый пароль");
         }
 
-        public void OnTablesDataGridColumnGenerating(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            var dataGrid = (DataGrid)sender;
-
-            Type collectionType = dataGrid.ItemsSource.GetType();
-
-            var itemType = collectionType.GetGenericArguments().SingleOrDefault();
-
-            if (itemType == null && dataGrid.ItemsSource is ListCollectionView view)
-            {
-                var prop = view.ItemProperties.FirstOrDefault();
-
-                if (prop == null)
-                    return;
-
-                var componentTypeProperty = prop.Descriptor.GetType().GetProperty("ComponentType");
-                var componentType = componentTypeProperty?.GetValue(prop.Descriptor) as Type;
-
-                if (componentType != null)
-                    itemType = componentType;
-            }
-
-            var propertyType = e.PropertyType.IsGenericType ? e.PropertyType.GenericTypeArguments.First() : e.PropertyType;
-            var propertyIsDateTime = MetadataInfo<IAppliedModel>.PropertyIsDateTime(e.PropertyType);
-
-            if (propertyIsDateTime)
-            {
-                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy HH:mm";
-            }
-
-            var name = MetadataInfo<IAppliedModel>.GetPropertyLocalizedName(itemType, e.PropertyName);
-
-            if (!MetadataInfo<IAppliedModel>.IsVisibleByOverride(itemType, e.PropertyName)
-                            && MetadataInfo<IAppliedModel>.PropertyIsVirtual(itemType, e.PropertyName)
-                            && !propertyIsDateTime)
-            {
-                e.Cancel = true;
-            }
-
-            e.Column.Header = name;
-            e.Column.CanUserSort = true;
-        }
-
         private void LoadUsers(DateTime from, DateTime to, string searchString)
         {
             using var logic = new UserLogic();
