@@ -10,18 +10,29 @@ namespace MifareReaderApp.Stuff.Commands
 {
     public class SimpleCommand : ICommand
     {
-        public event EventHandler? CanExecuteChanged;
-        public delegate void SimpleCommandHandler(object? entity);
         public SimpleCommandHandler CommandHandler { get; set; }
 
-        public bool CanExecute(object? parameter)
+        public delegate void SimpleCommandHandler(object? entity);
+        public event EventHandler? CanExecuteChanged;
+
+        public SimpleCommand()
         {
-            return true;
+                
+        }
+
+        public SimpleCommand(SimpleCommandHandler handler)
+        {
+            CommandHandler = handler;
         }
 
         public virtual void Execute(object? parameter)
         {
             CommandHandler?.Invoke(parameter);
+        }
+
+        public bool CanExecute(object? parameter)
+        {
+            return true;
         }
     }
 }
